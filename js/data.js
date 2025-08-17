@@ -123,6 +123,9 @@ const productData = {
     }
 };
 
+// Make productData globally accessible
+window.productData = productData;
+
 // Page content data
 const pageContent = {
     "grupos/at": {

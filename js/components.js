@@ -86,13 +86,26 @@ function renderTiendaPage() {
 }
 
 function renderProductPage(productKey) {
-    const product = productData[productKey];
-    if (!product) return '<p>Producto no encontrado</p>';
+    console.log('Loading product:', productKey);
+    
+    // Check if productData is available globally
+    if (typeof window.productData === 'undefined') {
+        console.error('productData not loaded');
+        return '<p>Error: Datos del producto no disponibles</p>';
+    }
+    
+    console.log('Available products:', Object.keys(window.productData));
+    
+    const product = window.productData[productKey];
+    if (!product) {
+        console.error('Product not found:', productKey);
+        return '<p>Producto no encontrado</p>';
+    }
     
     let html = '';
     
-    // Left div - Product image and purchase info
-    html += `<div class='imagenDisco' style='text-align:left;font-family:Arial; font-size:12px;'>`;
+    // Left div - Product image and purchase info (except nobandcamp)
+    html += `<div class='imagenDisco' style='text-align:left;font-family:Arial; font-size:12px; float:left; width:280px;'>`;
     html += `<img src='images/tienda/${product.img}.jpg' width='280'/>`;
     
     if (product.estado === "ok") {
@@ -117,7 +130,7 @@ function renderProductPage(productKey) {
         html += `<br><strong>Lanzamiento:</strong> ${product.lanzamiento}`;
         html += `<br><strong>Precio:</strong> ${product.precio} (Envío incluido)`;
         html += `<br><a href='${product.bcurl}' style='display:inline-block;'>Comprar en Bandcamp</a>`;
-    } else if (product.estado === "nobandcamp") {
+    } else if (product.estado === "preorder") {
         html += `<br><strong>Formato:</strong> ${product.formato}`;
         html += `<br><strong>Lanzamiento:</strong> ${product.lanzamiento}`;
         html += `<br><strong>Precio:</strong> ${product.precio} (Envío incluido)`;
@@ -128,17 +141,34 @@ function renderProductPage(productKey) {
         html += `<input type='image' src='images/tienda/comprar.png' border='0' class='button' name='submit' value='Comprar' alt=''>`;
         html += `<img alt='' border='0' src='https://www.paypal.com/es_ES/i/scr/pixel.gif' width='1' height='1'>`;
         html += `</form>`;
+        html += `<br>Los envíos comenzarán en junio de 2021`;
     }
+    // Note: nobandcamp products have NO info in left column - only image
     html += `</div>`;
     
-    // Right div - Bandcamp player
-    html += `<div class='playerDisco' style='text-align:left;font-family:Arial; font-size:12px;'>`;
+    // Right div - Bandcamp player or nobandcamp info
+    html += `<div class='playerDisco' style='text-align:left;font-family:Arial; font-size:12px; float:right; width:300px;'>`;
     if (product.bcalbum && product.bcalbum !== "") {
         html += `<iframe id="bc" width="300" height="390" style="position: relative; width: 300px; height: 390px;" src="https://bandcamp.com/EmbeddedPlayer/v=2/album=${product.bcalbum}/size=grande2/bgcol=FFFFFF/linkcol=333333/debug=true/" allowtransparency="true" frameborder="0"></iframe>`;
+    } else if (product.estado === "nobandcamp") {
+        html += `<strong>Formato:</strong> ${product.formato}`;
+        html += `<br><strong>Lanzamiento:</strong> ${product.lanzamiento}`;
+        html += `<br><strong>Precio:</strong> ${product.precio} (Envío incluido)`;
+        html += `<br>`;
+        html += `<form target='paypal' action='https://www.paypal.com/cgi-bin/webscr' method='post' style='display:inline-block;margin-top:3px;'>`;
+        html += `<input type='hidden' name='cmd' value='_s-xclick'>`;
+        html += `<input type='hidden' name='hosted_button_id' value='${product.btnppal}'>`;
+        html += `<input type='image' src='images/tienda/comprar.png' border='0' class='button' name='submit' value='Comprar' alt=''>`;
+        html += `<img alt='' border='0' src='https://www.paypal.com/es_ES/i/scr/pixel.gif' width='1' height='1'>`;
+        html += `</form>`;
+        html += `<a href='https://bit.ly/${product.grupo}${product.nombre}' class='descarga' style='margin-top:3px;margin-left:9px;display:inline-block;'><img src='images/tienda/descargar.png' border='0'></a>`;
     } else {
         html += `<span style='font-size:36;text-align:left;'>EL DISCO SELECCIONADO<br>NO PUEDE ESCUCHARSE<br>ACTUALMENTE</span>`;
     }
     html += `</div>`;
+    
+    // Clear floats
+    html += `<div style='clear:both;'></div>`;
     
     return html;
 }

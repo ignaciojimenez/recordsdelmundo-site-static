@@ -4,8 +4,15 @@ let currentPage = '';
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
-    // Set initial state - show home page
-    mostrar();
+    // Wait for all scripts to load, then initialize
+    setTimeout(() => {
+        if (typeof productData === 'undefined' || typeof pageContent === 'undefined') {
+            console.error('Data not loaded properly');
+            return;
+        }
+        // Set initial state - show home page
+        mostrar();
+    }, 100);
 });
 
 // Navigation functions (preserving original animation logic)
@@ -18,7 +25,13 @@ function mostrar() {
     
     // Clear content and reset menu states
     clearActiveMenus();
-    hideContent();
+    
+    // Hide content area completely for home state
+    const contenido = document.getElementById('contenido');
+    contenido.innerHTML = '';
+    contenido.style.display = 'none';
+    $('.lateral_izq_inferior').hide();
+    
     currentPage = '';
 }
 
@@ -35,7 +48,6 @@ function esconder(page) {
         document.getElementById("cabecera_logo").style.marginTop = "-570px";
         document.getElementById("cabecera_menu1").style.marginTop = "-40px";
         document.getElementById("cabecera_menu2").style.marginTop = "-70px";
-        document.getElementById("contenido").style.marginTop = "400px";
     }
     
     loadPage(page);
@@ -66,6 +78,15 @@ function loadPage(page) {
         }
         
         contenido.innerHTML = html;
+        contenido.style.display = 'block';
+        
+        // Set different margins for different page types
+        if (page === 'tienda' || page.startsWith('tienda/')) {
+            contenido.style.marginTop = '400px';
+        } else {
+            contenido.style.marginTop = '15px';
+        }
+        
         currentPage = page;
         
         // Show content with fade in
@@ -75,8 +96,8 @@ function loadPage(page) {
             $('.contenido').fadeIn(900);
         }
         
-        // Show back button for non-home pages
-        if (page !== '') {
+        // Show back button only for product pages
+        if (page.startsWith('tienda/producto/')) {
             $('.lateral_izq_inferior').fadeIn(900);
         }
         
@@ -84,25 +105,49 @@ function loadPage(page) {
 }
 
 function loadProductPage(productKey) {
-    hideContent();
+    // Stop any ongoing animations first
+    $('.contenido').stop(true, true);
+    $('.imagenDisco').stop(true, true);
+    $('.lateral_izq_inferior').stop(true, true);
     
+    // Hide content immediately without animation
+    $('.contenido').hide();
+    $('.lateral_izq_inferior').hide();
+    
+    // Set tienda header layout for product pages
+    document.getElementById("cabecera_siglas_img").style.marginTop = "0px";
+    document.getElementById("cabecera_logo").style.marginTop = "-570px";
+    document.getElementById("cabecera_menu1").style.marginTop = "-40px";
+    document.getElementById("cabecera_menu2").style.marginTop = "-70px";
+    
+    // Shorter timeout to reduce race conditions
     setTimeout(() => {
-        const contenido = document.getElementById('contenido');
-        contenido.innerHTML = renderProductPage(productKey);
-        contenido.className = 'contenido';
-        contenido.style.display = 'inline-block';
+        clearActiveMenus();
+        setActiveMenu('tienda');
         
-        // Show product page elements
-        $('.imagenDisco').fadeIn(900);
-        $('.lateral_izq_inferior').fadeIn(900);
+        const contenido = document.getElementById('contenido');
+        const productHtml = renderProductPage(productKey);
+        
+        contenido.innerHTML = productHtml;
+        contenido.className = 'contenido';
+        contenido.style.display = 'block';
+        contenido.style.marginTop = '400px';
+        
+        // Show content immediately and reliably
+        $(contenido).show();
+        $('.imagenDisco').show();
+        $('.lateral_izq_inferior').show();
         
         currentPage = `tienda/producto/${productKey}`;
-    }, 1000);
+    }, 300);
 }
 
 function hideContent() {
+    console.log('=== HIDE CONTENT DEBUG ===');
+    console.log('Hiding content, current display:', document.getElementById('contenido').style.display);
     $(".contenido").fadeOut(1000);
     $(".lateral_izq_inferior").fadeOut(1000);
+    console.log('=== END HIDE CONTENT DEBUG ===');
 }
 
 function clearActiveMenus() {
@@ -140,6 +185,11 @@ window.addEventListener('popstate', function(event) {
 function updateURL(page) {
     const url = page === '' ? '/' : `/${page}`;
     history.pushState({page: page}, '', url);
+}
+
+// Back button navigation - goes to tienda, not home
+function backToTienda() {
+    esconder('tienda');
 }
 
 // Email obfuscation function (preserved from original)
