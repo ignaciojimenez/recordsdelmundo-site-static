@@ -1,0 +1,409 @@
+/****************************************************
+*		ESTILOS GENERALES							*
+****************************************************/
+html, body {
+	margin: 0;
+	padding: 0;
+	background-color: #FFFFFF;
+	text-align:center;
+	display:block;
+	font-family:miFuente;
+	height: 100%; margin-bottom: 1px;
+	-webkit-font-smoothing: antialiased;
+}
+
+*:link, *:visited, *:hover, *:active, *:focus {
+   -webkit-transition:
+     color .25s linear,
+     background-color .25s linear,
+     border-color .25s linear;
+	-moz-transition:
+     color .25s linear,
+     background-color .25s linear,
+     border-color .25s linear;
+	-o-transition:
+     color .25s linear,
+     background-color .25s linear,
+     border-color .25s linear;
+   transition:
+     color .25s linear,
+     background-color .25s linear,
+     border-color .25s linear;
+}
+	a { text-decoration: none; color:#000;}
+	a:visited { text-decoration: none;  }
+	a:hover { text-decoration: none; color:#FFF; background-color:#000;}
+	
+	.menuactual a{text-decoration: none; color:#FFF; background-color:#000;}
+	.facebook{
+		height:30px;
+		width:30px;
+		display:inline-block;
+		background:transparent url('../images/iconos/facebook500.png') center top no-repeat;
+	}
+	.facebook:hover{
+		background-image: url('../images/iconos/facebook500_hover.png');
+		text-decoration: none;
+		color:#000;
+		background-color:transparent;
+	}
+	.twitter{
+		height:30px;
+		width:30px;
+		display:inline-block;
+		background:transparent url('../images/iconos/twitter.png') center top no-repeat;
+	}
+	.twitter:hover{
+		background-image: url('../images/iconos/twitter_hover.png');
+		text-decoration: none;
+		color:#000;
+		background-color:transparent;
+	}
+	.youtube{
+		height:30px;
+		width:30px;
+		display:inline-block;
+		background:transparent url('../images/iconos/youtube.png') center top no-repeat;
+	}
+	.youtube:hover{
+		background-image: url('../images/iconos/youtube_hover.png');
+		text-decoration: none;
+		color:#000;
+		background-color:transparent;
+	}
+	.bandcamp{
+		height:30px;
+		width:30px;
+		display:inline-block;
+		background:transparent url('../images/iconos/bandcamp.png') center top no-repeat;
+	}
+	.bandcamp:hover{
+		background-image: url('../images/iconos/bandcamp_hover.png');
+		text-decoration: none;
+		color:#000;
+		background-color:transparent;
+	}
+	.instagram{
+		height:30px;
+		width:30px;
+		display:inline-block;
+		background:transparent url('../images/iconos/instagram.png') center top no-repeat;
+	}
+	.instagram:hover{
+		background-image: url('../images/iconos/instagram_hover.png');
+		text-decoration: none;
+		color:#000;
+		background-color:transparent;
+	}
+	.piedefoto{
+		position: absolute;
+		margin-top: -22px;
+		margin-left: 2px;
+		text-align: right;
+		font-size: 15px;
+		color: rgba(245, 245, 245, 0.89);
+	}
+	.piedefoto a { text-decoration: none; color:rgba(245, 245, 245, 0.89);}
+	.piedefoto a:visited { text-decoration: none;  }
+	.piedefoto a:hover { text-decoration: none; color:#FFF;background-color:transparent;}
+
+/****************************************************
+*		ESTILO CONTENDOR CUERPO						*
+****************************************************/
+.container {
+    width: 95%;
+    min-width: 1000px;
+    margin: auto;
+}
+
+/****************************************************
+*		LATERAL IZQUIERDA							*
+****************************************************/
+	.lateral_izq {
+		height: 100%;
+		float: left;
+		width: 20%;
+		min-width: 150px;
+		visibility:hidden;
+	}
+	.lateral_izq_inferior {
+		height: 100%;
+		float: left;
+		width: 20%;
+		min-width: 150px;
+		position:fixed;
+		top:300px;
+		text-align:center;
+		display:none;
+	}
+	.back{
+		height:80px;
+		width:80px;
+		display:inline-block;
+		background:transparent url('../images/iconos/back.png') center top no-repeat;
+	}
+	.back:hover{
+		background-image: url('../images/iconos/back_gray.png');
+		text-decoration: none;
+		color:#000;
+		background-color:transparent;
+	}
+/****************************************************
+*		LATERAL DERECHA								*
+****************************************************/
+	.lateral_dch {
+		height: 100%;
+		float: right;
+		width: 20%;
+		min-width: 150px;
+		position: fixed;
+		top: 1em;
+		right: -40px;
+	}
+		.lateral_dch  a{
+			margin-left:5px;
+			margin-right:5px;
+		}
+			
+		.lateral_dch a:hover { text-decoration: none; color:#000; background-color:transparent;}
+		.lateral_dch  .content{
+			width:75%;
+		}
+		.lateral_dch  p{
+			text-align:left;
+			font-size:14px;
+			margin: 0;
+			margin-top: 5px;
+			width:100%;
+			color:#837E7C;
+			/*font-weight:bold;*/
+			letter-spacing:1px;
+		}
+		.lateral_dch  input{
+			margin-top: 7px;
+			/*border: 1px solid #848482;*/
+			border: 1px solid silver;
+			width:100%;
+		}
+			::-webkit-input-placeholder{color: silver;padding-left:2px;font-family:miFuente;letter-spacing:1px;}
+			.placeholder{color: silver;padding-left:2px;font-family:miFuente;letter-spacing:1px;}
+			
+		.lateral_dch  .success{
+			text-align:left;
+			font-size:14px;
+			margin: 0;
+			margin-top: 5px;
+			width:100%;
+			color:#837E7C;
+			letter-spacing:1px;
+			/*display: none;*/
+		}
+		
+/****************************************************
+*		ESTILOS CENTRAL								*
+****************************************************/
+	.centro {
+		float: left;
+		width: 60%;
+		min-width: 660px;
+	}
+	
+	
+/****************************************************
+*		ESTILOS CABECERAS							*
+****************************************************/
+	
+		.transicion_cabeceras{
+			-webkit-transition: all 1.2s ease;
+			-moz-transition: all 1.2s ease;
+			-o-transition: all 1.2s ease;
+			transition: all 1.2s ease;
+		}
+		.cabecera_siglas_img {
+			width: 100%;
+			padding-top:10px;
+		}
+		.cabecera_logo {
+			width: 100%;
+			margin-top:65px;
+		}
+		.cabecera_siglas_img a { text-decoration: none; color:transparent; background-color:transparent;}
+		.cabecera_siglas_img a:hover { text-decoration: none; color:transparent; background-color:transparent;}
+		.cabecera_logo a { text-decoration: none; color:transparent; background-color:transparent;}
+		.cabecera_logo a:hover { text-decoration: none; color:transparent; background-color:transparent;}
+		
+		.active { text-decoration: none; color:#FFF; background-color:#000;}
+		.cabecera_menu1 {
+			height: 40px;
+			font-size:17px;
+			margin-top:23px;
+			letter-spacing:1px;
+			transform:scale(1,1.3); /* W3C */
+			-webkit-transform:scale(1,1.3); /* Safari and Chrome */
+			-moz-transform:scale(1,1.3); /* Firefox */
+			-ms-transform:scale(1,1.3); /* IE 9 */
+			-o-transform:scale(1,1.3); /* Opera */
+		}
+			.cabecera_menu1 a{
+				margin-left:30px;
+				margin-right:30px;
+			}
+		.cabecera_menu2 {
+			width: 100%;
+			height: 40px;
+			font-size:30px;
+			font-weight:bold;
+			/*padding:10px;*/
+			margin-top:13px;
+			letter-spacing:3px;
+			transform:scale(1,1.2); /* W3C */
+			-webkit-transform:scale(1,1.2); /* Safari and Chrome */
+			-moz-transform:scale(1,1.2); /* Firefox */
+			-ms-transform:scale(1,1.2); /* IE 9 */
+			-o-transform:scale(1,1.2); /* Opera */
+		}
+/****************************************************
+*		ESTILOS CONTENIDO							*
+****************************************************/		
+		.contenido {
+			height: 100%;
+			width: 100%;
+			font-size:16px;
+			display:none;
+			text-align:justify;
+			margin-top:15px;
+			line-height:1.3em;
+		}
+		.contenido p{
+			margin:0;
+			margin-top:5px;
+			margin-bottom:5px;
+		}
+
+		.contenido .imagen{
+			width: 100%;
+		}
+
+/****************************************************
+*		ESTILOS INFO								*
+****************************************************/
+		.info p{
+		margin-top:15px;
+		margin-bottom:15px;
+		}
+
+		.contenido .titulo{
+			font-weight:bold;
+			line-height:1.4em;
+			font-size:17px;
+		}
+		.contenido .nombre{
+			font-weight:bold;
+			line-height:1.3em;
+		}
+/****************************************************
+*		ESTILOS GRUPOS								*
+****************************************************/
+		.contenido .iconos{
+			text-align:right;
+		}
+		.iconos{
+			margin-left:5px;
+			margin-right:5px;
+		}
+		.social a:hover{ text-decoration: none; color:#000; background-color:transparent;}
+
+		.contenido .tablagrupo{
+			min-width:650px;
+			width:100%;
+			border-spacing:0px;
+		}
+			.tablagrupo .datos{
+				width:100%;
+			}
+				.datos span{
+					color:darkgray;
+					font-weight:bold;
+				}
+				
+			.tablagrupo .social{
+				min-width:130px;
+			}
+
+/****************************************************
+*		ESTILOS TOUR								*
+****************************************************/
+		.contenido .tablatour{
+			min-width:650px;
+			width:100%;
+			text-align:center;
+			
+		}
+		.contenido .tourfila{
+			vertical-align:bottom;
+		}
+		.contenido .tourfecha{
+			text-align:center;
+			width:20%;
+		}
+		.contenido .tourgrupo{
+			text-align:left;
+			width:20%;
+		}
+		.contenido .tourinfo{
+			text-align:left;
+			width:60%;
+		}
+		
+		.contenido .tourinfo .entradas:hover { text-decoration: none; color:#000; background-color:transparent;}
+		
+			.contenido .tablatour th{
+				/*text-align:center;*/
+			}
+			
+
+/****************************************************
+*		ESTILOS BLOG								*
+****************************************************/
+			.tumblr_title{
+					font-weight:bold;
+					font-size:17px;
+			}
+			.tumblr_date{
+					text-align:right;
+					color:darkgray;
+			}
+			.lineablog{
+				border-bottom: 1px solid #E8E8E8;
+				width: 100%;
+				margin-top:15px;
+			}
+			.tumblr_post{
+			}
+				.tumblr_post img{
+					width:100%;
+				}
+				.tumblr_post .photoset_row{
+					width:100%;
+				}
+					.tumblr_post .photoset_row img{
+						width:100%;
+					}	
+
+/****************************************************
+*		ESTILOS PAGPRODUCTO							*
+****************************************************/
+.imagenDisco{
+	position:relative;
+	float:left;
+	display:none;
+	margin-left:20px;
+	width:45%;
+}
+.playerDisco{
+	position:relative;
+	display:inline-block;
+	width:45%;
+	margin-right:20px;
+	text-align:left;
+}	

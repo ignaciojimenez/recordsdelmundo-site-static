@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <title>Records del mundo</title>
+    <link rel="shortcut icon" href="images/favicons/globe_bw.png" type="image/x-icon">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Récords del Mundo es la casa de discos de los componentes de Atención Tsunami junto a Rodrigo (Ediciones Ochoacostado), Pablo (producción) y Emilio y Gonzalo (diseño). Nueve plusmarquistas del amor al arte que aúnan su experiencia previa y paralela en otras plataformas autogestionadas para seguir haciendo, juntos, lo que les gusta."/>
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    <meta property="og:title" content="Records del mundo" />
+    <meta property="og:type" content="Record label" />
+    <meta property="og:url" content="https://recordsdelmundo.es" />
+    <meta property="og:image" content="https://www.recordsdelmundo.es/images/fosbury.png" />
+    <meta property="og:description" content="Récords del Mundo es la casa de discos de los componentes de Atención Tsunami junto a Rodrigo (Ediciones Ochoacostado), Pablo (producción) y Emilio y Gonzalo (diseño). Nueve plusmarquistas del amor al arte que aúnan su experiencia previa y paralela en otras plataformas autogestionadas para seguir haciendo, juntos, lo que les gusta."/>
+    
+    <link href="css/fonts.css" type="text/css" rel="stylesheet" />
+    <link href="css/common.css" type="text/css" rel="stylesheet" />
+    <link href="css/store.css" type="text/css" rel="stylesheet" />
+    <link href="css/back.css" type="text/css" rel="stylesheet" />
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+        defer=true
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous">
+    </script>
+    <script src="js/data.js" defer=true></script>
+    <script src="js/components.js" defer=true></script>
+    <script src="js/main.js" defer=true></script>
+</head>
+<body>
+    <div class="container">
+        <div class="lateral_izq">
+            LATERAL IZQ
+        </div>
+        <div class="lateral_izq_inferior">
+            <a href="#" onclick="mostrar()" class="back" title="Back link"></a>
+        </div>
+
+        <div class="lateral_dch">
+            <div class="content">
+                <a class="facebook" href="https://www.facebook.com/recordsdelmundo"></a>
+                <a class="twitter" href="https://twitter.com/R_D_M_"></a>
+                <a class="youtube" href="https://www.youtube.com/user/delmundorecords"></a>
+            </div>
+        </div>
+        
+        <div class="centro">
+            <!-- Header/Menu -->
+            <div class="cabecera_siglas_img transicion_cabeceras" id="cabecera_siglas_img">
+                <a href="#" onclick="mostrar()"><img src="images/cabecera.png" /></a>
+            </div>
+            <div class="cabecera_logo transicion_cabeceras" id="cabecera_logo">
+                <a href="#" onclick="mostrar()"><img src="images/fosbury.png"/></a>
+            </div>
+            <div class="cabecera_menu1 transicion_cabeceras" id="cabecera_menu1">
+                <a href="#" onclick="esconder('grupos/inc');" id="menu-inc">INCENDIOS</a>
+                <a href="#" onclick="esconder('grupos/at');" id="menu-at">ATENCI&Oacute;N TSUNAMI</a>
+                <a href="#" onclick="esconder('grupos/par');" id="menu-par">PARACA&Iacute;DAS</a>
+            </div>
+            <div class="cabecera_menu2 transicion_cabeceras" id="cabecera_menu2">
+                <a href="#" onclick="esconder('info');" id="menu-info">INFO</a>
+                &nbsp;&middot;&nbsp;
+                <a href="#" onclick="esconder('tienda');" id="menu-tienda">TIENDA</a>
+            </div>
+
+            <div class="contenido" id="contenido">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+        </div>
+    </div>
+</body>
+</html>
