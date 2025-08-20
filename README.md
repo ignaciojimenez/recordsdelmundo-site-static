@@ -24,32 +24,69 @@ python3 -m http.server 8000
 
 ## Content Management
 
-### Adding New Albums
-Edit `js/data.js` to add new products:
+### Data files
+- `data/products.json` — Store catalog (all products/albums)
+- `data/content.json` — Site content (artist pages under `grupos/*` and the `info` page)
 
-```javascript
-"album-key": {
-    "nombre": "album-key",
-    "grupo": "artist-name",
-    "tipo": "disco",
-    "estado": "ok",           // ok, preorder, bandcamp, nobandcamp, reedit
-    "bcalbum": "bandcamp-id", // Bandcamp album ID for player
-    "img": "album-image",     // Image filename (without .jpg)
-    "formato": "Vinilo 12''",
-    "lanzamiento": "Release date",
-    "precio": "Price €",
-    "btnppal": "PAYPAL_BUTTON_ID"
+Both files are fetched by `js/main.js` at runtime;
+
+### Add or edit a product (`data/products.json`)
+Each product is keyed by a short identifier (used in URLs and image names):
+
+```json
+"vltra": {
+  "nombre": "vltra",
+  "grupo": "ATENCIÓN TSUNAMI",
+  "tipo": "disco",
+  "estado": "ok",              
+  "bcalbum": "0000000000",    
+  "img": "vltra",             
+  "formato": "Vinilo 12''",
+  "lanzamiento": "2019",
+  "precio": "15€",
+  "btnppal": "ZHYA5ZJ84P94C"   
 }
 ```
+
+Field notes:
+- `estado`: 
+  - `ok` (sell via PayPal)
+  - `preorder` (shows preorder text + PayPal)
+  - `bandcamp` (links out)
+  - `nobandcamp`/`reedit` (no PayPal)
+- `btnppal`: PayPal Hosted Button ID used at `https://www.paypal.com/ncp/payment/{btnppal}`
+- `img`: base filename of the cover image in `images/tienda/` (without extension)
+
+### Edit artist/info pages (`data/content.json`)
+Artist pages are keyed by their route, e.g. `grupos/at`, `grupos/inc`, `grupos/par`. Example:
+
+```json
+"grupos/at": {
+  "title": "ATENCIÓN TSUNAMI",
+  "image": "images/at_selr_1200.jpg",
+  "imageCredit": "Foto: <a href=\"http://nsefotografia.com/\">Mariano Regidor</a>",
+  "social": {
+    "facebook": "http://www.facebook.com/atencion.tsunami",
+    "instagram": "http://instagram.com/atenciontsunami",
+    "bandcamp": "http://atenciontsunami.bandcamp.com"
+  },
+  "files": [
+    { "name": "Nota de prensa", "url": "grupos/at/AT_VLTRA_Prensa.pdf" }
+  ],
+  "content": "<p>Descripción en HTML...</p>"
+}
+```
+
+The `info` page lives under the `info` key with similar fields.
 
 ### Album Images
 - Add album covers to `images/tienda/`
 - Use `.jpg` format, 280px width recommended
-- Filename should match the `img` field in data.js
+- Filename must match the product’s `img` value (e.g., `img: "vltra"` -> `images/tienda/vltra.jpg`)
 
 ### Press Materials
 - Add PDF files to `grupos/[artist-folder]/`
-- Update navigation in `js/main.js` if needed
+- Update links inside `data/content.json` (the `files` array)
 
 ## Site Structure
 
@@ -65,7 +102,9 @@ Edit `js/data.js` to add new products:
 ├── js/
 │   ├── main.js        # Routing, navigation, animations
 │   ├── components.js  # Page templates and rendering
-│   └── data.js        # Product catalog and content
+├── data/
+│   ├── products.json  # Store catalog
+│   └── content.json   # Artist pages + info content
 ├── css/
 │   ├── common.css     # Main styles and layout
 │   ├── store.css      # Shop-specific styles
@@ -84,8 +123,9 @@ Edit `js/data.js` to add new products:
 ## Troubleshooting
 
 ### Common Issues/Tips
-- **Album not showing**: Check `data.js` syntax and image file exists
+- **Album not showing**: Check `data/products.json` syntax and that the image exists in `images/tienda/`
 - **PayPal button not working**: Verify `btnppal` ID in product data
 - **Bandcamp player not loading**: Check `bcalbum` ID is correct
-- **Navigation broken**: Check URL hash routing in `main.js`
+- **JSON not loading locally**: Serve via HTTP (e.g., `python3 -m http.server 8000`) so `fetch()` can read `data/*.json`
+- **Navigation broken**: Check client routing in `js/main.js`
 - Test all album states: `ok`, `preorder`, `bandcamp`, `nobandcamp`, `reedit`
