@@ -113,35 +113,31 @@ function renderProductPage(productKey) {
         html += `<br><strong>Lanzamiento:</strong> ${product.lanzamiento}`;
         html += `<br><strong>Precio:</strong> ${product.precio} (Envío incluido)`;
         html += `<br>`;
-        html += `<form target='paypal' action='https://www.paypal.com/cgi-bin/webscr' method='post' style='display:inline-block;margin-top:3px;'>`;
-        html += `<input type='hidden' name='cmd' value='_s-xclick'>`;
-        html += `<input type='hidden' name='hosted_button_id' value='${product.btnppal}'>`;
-        html += `<input type='image' src='images/tienda/comprar.png' border='0' class='button' name='submit' value='Comprar' alt=''>`;
-        html += `<img alt='' border='0' src='https://www.paypal.com/es_ES/i/scr/pixel.gif' width='1' height='1'>`;
-        html += `</form>`;
-        html += `<a href='https://bit.ly/${product.grupo}${product.nombre}' class='descarga' style='margin-top:3px;margin-left:9px;display:inline-block;'><img src='images/tienda/descargar.png' border='0'></a>`;
+        // New PayPal hosted button integration
+        html += `<form action="https://www.paypal.com/ncp/payment/${product.btnppal}" method="post" target="_blank" class="paypal-form-container">
+                   <input class="paypal-comprar-btn" type="submit" value=" COMPRAR " />
+                 </form>`;
+        html += `<a href='https://bit.ly/${product.grupo}${product.nombre}' class='descarga'>DESCARGAR</a>`;
     } else if (product.estado === "reedit") {
         html += `<br><strong>Formato:</strong> ${product.formato}`;
         html += `<br><strong>Lanzamiento:</strong> ${product.lanzamiento}`;
         html += `<br>Esta edición se ha agotado. En caso de que estés interesado en una reedición, ponte en contacto con nosotros<br>`;
-        html += `<a href='https://bit.ly/${product.grupo}${product.nombre}' class='descarga' style='display:inline-block;'><img src='images/tienda/descargar.png' border='0'></a>`;
+        html += `<a href='https://bit.ly/${product.grupo}${product.nombre}' class='descarga'>DESCARGAR</a>`;
     } else if (product.estado === "bandcamp") {
         html += `<br><strong>Formato:</strong> ${product.formato}`;
         html += `<br><strong>Lanzamiento:</strong> ${product.lanzamiento}`;
         html += `<br><strong>Precio:</strong> ${product.precio} (Envío incluido)`;
-        html += `<br><a href='${product.bcurl}' style='display:inline-block;'>Comprar en Bandcamp</a>`;
+        html += `<br><a href='${product.bcurl}' style='display:inline-block;' class='descarga'>Comprar en Bandcamp</a>`;
     } else if (product.estado === "preorder") {
         html += `<br><strong>Formato:</strong> ${product.formato}`;
         html += `<br><strong>Lanzamiento:</strong> ${product.lanzamiento}`;
         html += `<br><strong>Precio:</strong> ${product.precio} (Envío incluido)`;
         html += `<br>`;
-        html += `<form target='paypal' action='https://www.paypal.com/cgi-bin/webscr' method='post' style='display:inline-block;margin-top:3px;'>`;
-        html += `<input type='hidden' name='cmd' value='_s-xclick'>`;
-        html += `<input type='hidden' name='hosted_button_id' value='${product.btnppal}'>`;
-        html += `<input type='image' src='images/tienda/comprar.png' border='0' class='button' name='submit' value='Comprar' alt=''>`;
-        html += `<img alt='' border='0' src='https://www.paypal.com/es_ES/i/scr/pixel.gif' width='1' height='1'>`;
-        html += `</form>`;
-        html += `<br>Los envíos comenzarán en junio de 2021`;
+        html += `<br>Los envíos comenzarán en junio de XXX`;        
+        // New PayPal hosted button integration for preorder
+        html += `<form action="https://www.paypal.com/ncp/payment/${product.btnppal}" method="post" target="_blank" class="paypal-form-container">
+                   <input class="paypal-comprar-btn" type="submit" value=" COMPRAR " />
+                 </form>`;
     }
     // Note: nobandcamp products have NO info in left column - only image
     html += `</div>`;
@@ -155,13 +151,11 @@ function renderProductPage(productKey) {
         html += `<br><strong>Lanzamiento:</strong> ${product.lanzamiento}`;
         html += `<br><strong>Precio:</strong> ${product.precio} (Envío incluido)`;
         html += `<br>`;
-        html += `<form target='paypal' action='https://www.paypal.com/cgi-bin/webscr' method='post' style='display:inline-block;margin-top:3px;'>`;
-        html += `<input type='hidden' name='cmd' value='_s-xclick'>`;
-        html += `<input type='hidden' name='hosted_button_id' value='${product.btnppal}'>`;
-        html += `<input type='image' src='images/tienda/comprar.png' border='0' class='button' name='submit' value='Comprar' alt=''>`;
-        html += `<img alt='' border='0' src='https://www.paypal.com/es_ES/i/scr/pixel.gif' width='1' height='1'>`;
-        html += `</form>`;
-        html += `<a href='https://bit.ly/${product.grupo}${product.nombre}' class='descarga' style='margin-top:3px;margin-left:9px;display:inline-block;'><img src='images/tienda/descargar.png' border='0'></a>`;
+        // New PayPal hosted button integration for nobandcamp
+        html += `<form action="https://www.paypal.com/ncp/payment/${product.btnppal}" method="post" target="_blank" class="paypal-form-container">
+                   <input class="paypal-comprar-btn" type="submit" value=" COMPRAR " />
+                 </form>`;
+        html += `<a href='https://bit.ly/${product.grupo}${product.nombre}' class='descarga'>DESCARGAR</a>`;
     } else {
         html += `<span style='font-size:36;text-align:left;'>EL DISCO SELECCIONADO<br>NO PUEDE ESCUCHARSE<br>ACTUALMENTE</span>`;
     }
@@ -172,3 +166,4 @@ function renderProductPage(productKey) {
     
     return html;
 }
+

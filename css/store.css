@@ -175,6 +175,62 @@ margin-top:15px;
 		margin: 0 0 0 -30px;
 		line-height: 0;
 	}
-	.descarga:hover{
-		background-color: transparent;
+	/* PayPal and Download Button Styles */
+	.paypal-comprar-btn{
+		display:inline-block;
+		background:#333;
+		border:1px solid #555;
+		border-radius:3px;
+		padding:8px 12px;
+		margin-right: 9px;
+		text-decoration:none;
+		color:white;
+		font-family:Arial,sans-serif;
+		font-size:12px;
+		font-weight:bold;
+		text-transform:uppercase;
+		letter-spacing:0.5px;
+		cursor:pointer;
+		transition:all 0.2s ease;
+	}
+	.paypal-comprar-btn:hover{
+		background-color:#444;
+		border-color:#666;
+	}
+	.paypal-form-container{
+		display:inline-block;
+		margin-top:3px;
+		text-align:left;
+		vertical-align:top;
+	}
+
+	.descarga {
+		display: inline-block;
+		background: #333;
+		border: 1px solid #555;
+		border-radius: 3px;
+		padding: 8px 12px;
+		margin-left: 0px;
+		margin-top: 3px;
+		text-decoration: none;
+		color: white;
+		font-family: Arial, sans-serif;
+		font-size: 12px;
+		font-weight: bold;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		transition: all 0.2s ease;
+		line-height: normal;
+	}
+
+	.descarga:hover {
+		background: #444;
+		border-color: #666;
+		text-decoration: none;
+		color: white;
+	}
+
+	.descarga img {
+		vertical-align: middle;
+		filter: brightness(0) invert(1);
 	}
