@@ -1,18 +1,41 @@
 // Main application logic - routing, animations, and page management
 
 let currentPage = '';
+let productData = {};
+let pageContent = {};
+
+// Load JSON data files
+async function loadData() {
+    try {
+        const [productsResponse, contentResponse] = await Promise.all([
+            fetch('data/products.json'),
+            fetch('data/content.json')
+        ]);
+        
+        productData = await productsResponse.json();
+        pageContent = await contentResponse.json();
+        
+        // Make data globally accessible
+        window.productData = productData;
+        window.pageContent = pageContent;
+        
+        console.log('Data loaded successfully');
+        return true;
+    } catch (error) {
+        console.error('Error loading data:', error);
+        return false;
+    }
+}
 
 // Initialize the application
-document.addEventListener('DOMContentLoaded', function() {
-    // Wait for all scripts to load, then initialize
-    setTimeout(() => {
-        if (typeof productData === 'undefined' || typeof pageContent === 'undefined') {
-            console.error('Data not loaded properly');
-            return;
-        }
+document.addEventListener('DOMContentLoaded', async function() {
+    const dataLoaded = await loadData();
+    if (dataLoaded) {
         // Set initial state - show home page
         mostrar();
-    }, 100);
+    } else {
+        console.error('Failed to load application data');
+    }
 });
 
 // Navigation functions (preserving original animation logic)
@@ -139,6 +162,9 @@ function loadProductPage(productKey) {
         $('.lateral_izq_inferior').show();
         
         currentPage = `tienda/producto/${productKey}`;
+        
+        // Bind button event handlers after DOM is ready
+        bindPendingButtonHandlers();
     }, 300);
 }
 
