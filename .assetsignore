@@ -1,0 +1,4 @@
+# Exclude Pages Functions entrypoint from static assets upload
+# This prevents wrangler from treating _worker.js as a public asset
+# while still deploying it as a Pages Functions worker.
+_worker.js
