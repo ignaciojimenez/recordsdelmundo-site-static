@@ -31,15 +31,42 @@ async function loadData() {
 document.addEventListener('DOMContentLoaded', async function() {
     const dataLoaded = await loadData();
     if (dataLoaded) {
-        // Set initial state - show home page
-        mostrar();
+        // Route based on clean URL path on initial load
+        routeFromURL();
+
+        // Intercept internal link clicks to prevent full page reload during local testing and production
+        document.addEventListener('click', function (e) {
+            const a = e.target.closest('a');
+            if (!a || !a.getAttribute) return;
+            const href = a.getAttribute('href');
+            if (!href || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('#')) return;
+            const url = new URL(href, window.location.origin);
+            const path = url.pathname.replace(/\/?$/, ''); // remove optional trailing '/'
+            const looksLikeFile = /\.[a-zA-Z0-9]{2,8}$/.test(path);
+            const sameOrigin = url.origin === window.location.origin;
+            if (!sameOrigin || looksLikeFile) return;
+
+            // Known routes
+            if (path === '' || path === '/index') { e.preventDefault(); mostrar(); return; }
+            if (path === '/tienda') { e.preventDefault(); esconder('tienda'); return; }
+            if (path === '/info') { e.preventDefault(); esconder('info'); return; }
+            if (path === '/grupos/inc') { e.preventDefault(); esconder('grupos/inc'); return; }
+            if (path === '/grupos/at') { e.preventDefault(); esconder('grupos/at'); return; }
+            if (path === '/grupos/par') { e.preventDefault(); esconder('grupos/par'); return; }
+            if (path.startsWith('/tienda/producto/')) {
+                e.preventDefault();
+                const key = path.split('/')[3];
+                if (key) loadProductPage(key);
+                return;
+            }
+        }, true);
     } else {
         console.error('Failed to load application data');
     }
 });
 
 // Navigation functions (preserving original animation logic)
-function mostrar() {
+function mostrar(suppressHistory = false) {
     document.getElementById("cabecera_siglas_img").style.marginTop = "0px";
     document.getElementById("cabecera_logo").style.marginTop = "65px";
     document.getElementById("cabecera_menu1").style.marginTop = "23px";
@@ -56,9 +83,10 @@ function mostrar() {
     $('.lateral_izq_inferior').hide();
     
     currentPage = '';
+    if (!suppressHistory) updateURL('');
 }
 
-function esconder(page) {
+function esconder(page, suppressHistory = false) {
     if (page.indexOf("tienda") === -1) {
         document.getElementById("cabecera_siglas_img").style.marginTop = "-200px";
         document.getElementById("cabecera_logo").style.marginTop = "0px";
@@ -73,6 +101,7 @@ function esconder(page) {
         document.getElementById("cabecera_menu2").style.marginTop = "-70px";
     }
     
+    if (!suppressHistory) updateURL(page);
     loadPage(page);
 }
 
@@ -127,7 +156,7 @@ function loadPage(page) {
     }, 1000);
 }
 
-function loadProductPage(productKey) {
+function loadProductPage(productKey, suppressHistory = false) {
     // Stop any ongoing animations first
     $('.contenido').stop(true, true);
     $('.imagenDisco').stop(true, true);
@@ -162,6 +191,7 @@ function loadProductPage(productKey) {
         $('.lateral_izq_inferior').show();
         
         currentPage = `tienda/producto/${productKey}`;
+        if (!suppressHistory) updateURL(currentPage);
         
         // Note: Removed call to undefined bindPendingButtonHandlers() (was causing ReferenceError)
     }, 300);
@@ -195,15 +225,33 @@ function setActiveMenu(page) {
     }
 }
 
-// Handle browser back/forward buttons
-window.addEventListener('popstate', function(event) {
-    if (event.state && event.state.page) {
-        if (event.state.page === '') {
-            mostrar();
-        } else {
-            esconder(event.state.page);
-        }
+// Route based on the current URL path
+function routeFromURL() {
+    let path = window.location.pathname.replace(/^\/+/, ''); // remove leading '/'
+    if (path.endsWith('/') && path.length > 1) path = path.slice(0, -1); // remove trailing '/'
+    if (path === '' || path === 'index.html') {
+        mostrar(true);
+        return;
     }
+    // tienda/producto/:key
+    if (path.startsWith('tienda/producto/')) {
+        const key = path.split('/')[2];
+        loadProductPage(key, true);
+        return;
+    }
+    // known pages
+    const known = ['tienda', 'info', 'grupos/inc', 'grupos/at', 'grupos/par'];
+    if (known.includes(path)) {
+        esconder(path, true);
+        return;
+    }
+    // fallback
+    esconder('tienda', true);
+}
+
+// Handle browser back/forward buttons using current URL
+window.addEventListener('popstate', function() {
+    routeFromURL();
 });
 
 // Update URL without page reload (for better UX, though not required for static hosting)

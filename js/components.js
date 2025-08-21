@@ -68,7 +68,7 @@ function renderTiendaPage() {
     products.forEach(product => {
         html += `
             <div class="product">
-                <a href="#" onclick="loadProductPage('${product.key}')" title="Ver ${product.title}">
+                <a href="/tienda/producto/${product.key}" onclick="loadProductPage('${product.key}'); return false;" title="Ver ${product.title}">
                     <div class="product_header">
                         <h2>${product.title}</h2>
                         <span class="dash"></span>

@@ -12,6 +12,8 @@
     <meta property="og:image" content="https://www.recordsdelmundo.es/images/fosbury.png" />
     <meta property="og:description" content="Récords del Mundo es la casa de discos de los componentes de Atención Tsunami junto a Rodrigo (Ediciones Ochoacostado), Pablo (producción) y Emilio y Gonzalo (diseño). Nueve plusmarquistas del amor al arte que aúnan su experiencia previa y paralela en otras plataformas autogestionadas para seguir haciendo, juntos, lo que les gusta."/>
     
+    <base href="/">
+    
     <link href="css/fonts.css" type="text/css" rel="stylesheet" />
     <link href="css/common.css" type="text/css" rel="stylesheet" />
     <link href="css/store.css" type="text/css" rel="stylesheet" />
@@ -27,7 +29,7 @@
             LATERAL IZQ
         </div>
         <div class="lateral_izq_inferior">
-            <a href="#" onclick="backToTienda()" class="back" title="Back link"></a>
+            <a href="/tienda" onclick="backToTienda(); return false;" class="back" title="Back link"></a>
         </div>
 
         <div class="lateral_dch">
@@ -41,20 +43,20 @@
         <div class="centro">
             <!-- Header/Menu -->
             <div class="cabecera_siglas_img transicion_cabeceras" id="cabecera_siglas_img">
-                <a href="#" onclick="mostrar()"><img src="images/cabecera.png" /></a>
+                <a href="/" onclick="mostrar(); return false;"><img src="images/cabecera.png" /></a>
             </div>
             <div class="cabecera_logo transicion_cabeceras" id="cabecera_logo">
-                <a href="#" onclick="mostrar()"><img src="images/fosbury.png"/></a>
+                <a href="/" onclick="mostrar(); return false;"><img src="images/fosbury.png"/></a>
             </div>
             <div class="cabecera_menu1 transicion_cabeceras" id="cabecera_menu1">
-                <a href="#" onclick="esconder('grupos/inc');" id="menu-inc">INCENDIOS</a>
-                <a href="#" onclick="esconder('grupos/at');" id="menu-at">ATENCI&Oacute;N TSUNAMI</a>
-                <a href="#" onclick="esconder('grupos/par');" id="menu-par">PARACA&Iacute;DAS</a>
+                <a href="/grupos/inc" onclick="esconder('grupos/inc'); return false;" id="menu-inc">INCENDIOS</a>
+                <a href="/grupos/at" onclick="esconder('grupos/at'); return false;" id="menu-at">ATENCI&Oacute;N TSUNAMI</a>
+                <a href="/grupos/par" onclick="esconder('grupos/par'); return false;" id="menu-par">PARACA&Iacute;DAS</a>
             </div>
             <div class="cabecera_menu2 transicion_cabeceras" id="cabecera_menu2">
-                <a href="#" onclick="esconder('info');" id="menu-info">INFO</a>
+                <a href="/info" onclick="esconder('info'); return false;" id="menu-info">INFO</a>
                 &nbsp;&middot;&nbsp;
-                <a href="#" onclick="esconder('tienda');" id="menu-tienda">TIENDA</a>
+                <a href="/tienda" onclick="esconder('tienda'); return false;" id="menu-tienda">TIENDA</a>
             </div>
 
             <div class="contenido" id="contenido">
