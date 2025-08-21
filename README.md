@@ -7,19 +7,26 @@ Official website for Records del Mundo, an independent record label. This is a s
 
 ## Quick Start
 
-### Local Development
+### Local Development (SPA routing)
 ```bash
 # Clone the repository
 git clone https://github.com/ignaciojimenez/recordsdelmundo-site-static.git
+cd recordsdelmundo-site-static
 
-# Start a local server (since it's an SPA nothing else is needed)
-python3 -m http.server 8000
+# Start the dev server (adds SPA rewrites so deep links work)
+python3 server.py
+
+# Open any path directly (all will render index.html and client routes)
+# http://localhost:8000/
+# http://localhost:8000/tienda
+# http://localhost:8000/grupos/at
+# http://localhost:8000/tienda/producto/vltra
 ```
 
 ### Making Changes
 1. Edit files locally
 2. Test on local server
-3. Commit and push to `main` branch
+3. Commit and push to a feature branch; open PR into `main`
 4. Site automatically deploys via Cloudflare Pages
 
 ## Content Management
@@ -126,6 +133,6 @@ The `info` page lives under the `info` key with similar fields.
 - **Album not showing**: Check `data/products.json` syntax and that the image exists in `images/tienda/`
 - **PayPal button not working**: Verify `btnppal` ID in product data
 - **Bandcamp player not loading**: Check `bcalbum` ID is correct
-- **JSON not loading locally**: Serve via HTTP (e.g., `python3 -m http.server 8000`) so `fetch()` can read `data/*.json`
+- **JSON not loading locally**: Use `python3 server.py` (handles SPA + proper MIME types) so `fetch()` can read `data/*.json` and deep links work
 - **Navigation broken**: Check client routing in `js/main.js`
 - Test all album states: `ok`, `preorder`, `bandcamp`, `nobandcamp`, `reedit`
