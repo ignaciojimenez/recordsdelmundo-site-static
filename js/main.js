@@ -163,8 +163,7 @@ function loadProductPage(productKey) {
         
         currentPage = `tienda/producto/${productKey}`;
         
-        // Bind button event handlers after DOM is ready
-        bindPendingButtonHandlers();
+        // Note: Removed call to undefined bindPendingButtonHandlers() (was causing ReferenceError)
     }, 300);
 }
 
@@ -218,12 +217,4 @@ function backToTienda() {
     esconder('tienda');
 }
 
-// Email obfuscation function (preserved from original)
-function printmail(nombre, tagid) {
-    const mail = nombre + "@recordsdelmundo.es";
-    const s0 = document.getElementById(tagid);
-    const newlink = document.createElement("a");
-    newlink.setAttribute("href", "mailto:" + mail);
-    newlink.innerText = mail;
-    s0.appendChild(newlink);
-}
+// Removed legacy printmail() helper; content uses direct mailto links now
