@@ -4,13 +4,14 @@ export default {
     const { pathname } = url;
     const method = request.method;
     const looksLikeFile = /\.[a-zA-Z0-9]{2,8}$/.test(pathname);
+    const accept = request.headers.get('accept') || '';
 
     // Allow real static success page under /tienda
     if (pathname.startsWith('/tienda/success')) {
       return env.ASSETS.fetch(request);
     }
 
-    // For SPA routes (no file extension), serve index.html for GET and HEAD
+    // For SPA navigations (no file extension), serve index.html for GET and HEAD
     if ((method === 'GET' || method === 'HEAD') && !looksLikeFile) {
       const indexUrl = new URL('/index.html', url.origin);
       const headers = new Headers(request.headers);
@@ -26,6 +27,8 @@ export default {
       const resHeaders = new Headers(res.headers);
       resHeaders.set('content-type', 'text/html; charset=utf-8');
       resHeaders.set('content-disposition', 'inline');
+      resHeaders.set('cache-control', 'no-store');
+      resHeaders.set('x-rdm-spa', '1');
 
       if (method === 'HEAD') {
         return new Response(null, { status: res.status, statusText: res.statusText, headers: resHeaders });

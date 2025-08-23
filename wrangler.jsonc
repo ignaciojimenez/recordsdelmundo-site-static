@@ -1,7 +1,12 @@
 {
-    "name": "recordsdelmundo",
-    "compatibility_date": "2025-08-17",
-    "assets": {
-      "directory": "./"
-    }
+  "name": "recordsdelmundo",
+  "main": "_worker.js",
+  "compatibility_date": "2025-08-17",
+  "assets": {
+    "directory": "./",
+    "exclude": [
+      "**/.git/**",
+      "**/.wrangler/**"
+    ]
+  }
 }
