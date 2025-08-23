@@ -1,3 +1,0 @@
-# SPA fallback: rewrite all unknown routes to index.html with 200 OK
-# Existing static assets (like /tienda/success/) will be served normally by Pages
-/*    /index.html   200
