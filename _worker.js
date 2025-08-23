@@ -22,11 +22,10 @@ export default {
       const indexReq = new Request(indexUrl, { method, headers });
       const res = await env.ASSETS.fetch(indexReq);
 
-      // Ensure correct content type so nosniff doesn't cause downloads
+      // Ensure correct content type and inline rendering to prevent downloads on reload
       const resHeaders = new Headers(res.headers);
-      if (!resHeaders.get('content-type')) {
-        resHeaders.set('content-type', 'text/html; charset=utf-8');
-      }
+      resHeaders.set('content-type', 'text/html; charset=utf-8');
+      resHeaders.set('content-disposition', 'inline');
 
       if (method === 'HEAD') {
         return new Response(null, { status: res.status, statusText: res.statusText, headers: resHeaders });
