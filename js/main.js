@@ -65,13 +65,30 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 });
 
+// Global error diagnostics (helps when testing fallback)
+window.addEventListener('error', (e) => {
+    console.error('[RDM] window error:', e.error || e.message || e);
+});
+window.addEventListener('unhandledrejection', (e) => {
+    console.error('[RDM] unhandled rejection:', e.reason || e);
+});
+
 // Navigation functions (preserving original animation logic)
 function mostrar(suppressHistory = false) {
-    document.getElementById("cabecera_siglas_img").style.marginTop = "0px";
-    document.getElementById("cabecera_logo").style.marginTop = "65px";
-    document.getElementById("cabecera_menu1").style.marginTop = "23px";
-    document.getElementById("cabecera_menu2").style.marginTop = "13px";
-    document.getElementsByClassName("lateral_izq_inferior")[0].style.marginTop = "400px";
+    const siglas = document.getElementById("cabecera_siglas_img");
+    const logo = document.getElementById("cabecera_logo");
+    const menu1 = document.getElementById("cabecera_menu1");
+    const menu2 = document.getElementById("cabecera_menu2");
+    const lizqInf = document.getElementsByClassName("lateral_izq_inferior")[0];
+    if (!siglas || !logo || !menu1 || !menu2 || !lizqInf) {
+        console.warn('[RDM] mostrar(): missing header elements; skipping animation');
+    } else {
+        siglas.style.marginTop = "0px";
+        logo.style.marginTop = "65px";
+        menu1.style.marginTop = "23px";
+        menu2.style.marginTop = "13px";
+        lizqInf.style.marginTop = "400px";
+    }
     
     // Clear content and reset menu states
     clearActiveMenus();
@@ -87,18 +104,26 @@ function mostrar(suppressHistory = false) {
 }
 
 function esconder(page, suppressHistory = false) {
-    if (page.indexOf("tienda") === -1) {
-        document.getElementById("cabecera_siglas_img").style.marginTop = "-200px";
-        document.getElementById("cabecera_logo").style.marginTop = "0px";
-        document.getElementById("cabecera_menu1").style.marginTop = "-10px";
-        document.getElementById("cabecera_menu2").style.marginTop = "0px";
-    } else if (page.indexOf("producto") !== -1) {
-        // Product page - keep current header state
+    const siglas = document.getElementById("cabecera_siglas_img");
+    const logo = document.getElementById("cabecera_logo");
+    const menu1 = document.getElementById("cabecera_menu1");
+    const menu2 = document.getElementById("cabecera_menu2");
+    if (!siglas || !logo || !menu1 || !menu2) {
+        console.warn('[RDM] esconder(): missing header elements; skipping header animations for page', page);
     } else {
-        document.getElementById("cabecera_siglas_img").style.marginTop = "0px";
-        document.getElementById("cabecera_logo").style.marginTop = "-570px";
-        document.getElementById("cabecera_menu1").style.marginTop = "-40px";
-        document.getElementById("cabecera_menu2").style.marginTop = "-70px";
+        if (page.indexOf("tienda") === -1) {
+            siglas.style.marginTop = "-200px";
+            logo.style.marginTop = "0px";
+            menu1.style.marginTop = "-10px";
+            menu2.style.marginTop = "0px";
+        } else if (page.indexOf("producto") !== -1) {
+            // Product page - keep current header state
+        } else {
+            siglas.style.marginTop = "0px";
+            logo.style.marginTop = "-570px";
+            menu1.style.marginTop = "-40px";
+            menu2.style.marginTop = "-70px";
+        }
     }
     
     if (!suppressHistory) updateURL(page);
@@ -189,23 +214,22 @@ function loadProductPage(productKey, suppressHistory = false) {
         $(contenido).show();
         $('.imagenDisco').show();
         $('.lateral_izq_inferior').show();
-        
-        currentPage = `tienda/producto/${productKey}`;
-        if (!suppressHistory) updateURL(currentPage);
-        
-        // Note: Removed call to undefined bindPendingButtonHandlers() (was causing ReferenceError)
-    }, 300);
 }
 
 function hideContent() {
-    console.log('=== HIDE CONTENT DEBUG ===');
-    console.log('Hiding content, current display:', document.getElementById('contenido').style.display);
-    $(".contenido").fadeOut(1000);
-    $(".lateral_izq_inferior").fadeOut(1000);
-    console.log('=== END HIDE CONTENT DEBUG ===');
+const contenido = document.getElementById('contenido');
+if (!contenido) { console.warn('[RDM] hideContent(): missing #contenido'); return; }
+console.log('=== HIDE CONTENT DEBUG ===');
+console.log('Hiding content, current display:', contenido.style.display);
+$(".contenido").fadeOut(1000);
+$(".lateral_izq_inferior").fadeOut(1000);
+console.log('=== END HIDE CONTENT DEBUG ===');
 }
 
 function clearActiveMenus() {
+document.querySelectorAll('#cabecera_menu1 a, #cabecera_menu2 a').forEach(link => {
+link.classList.remove('active');
+});
     document.querySelectorAll('#cabecera_menu1 a, #cabecera_menu2 a').forEach(link => {
         link.classList.remove('active');
     });
