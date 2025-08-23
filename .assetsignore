@@ -2,3 +2,8 @@
 # This prevents wrangler from treating _worker.js as a public asset
 # while still deploying it as a Pages Functions worker.
 _worker.js
+
+# General excludes to prevent uploading repo metadata and Wrangler temp files
+.git
+.wrangler
+.DS_Store
