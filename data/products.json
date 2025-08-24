@@ -132,5 +132,17 @@
     "precio": "15 €",
     "btnppal": "DMQQ4DCAWLDJ8",
     "description": "Atención Tsunami - Core - Vinilo 12''"
+  },
+  "junio": {
+    "nombre": "junio",
+    "grupo": "havalina",
+    "tipo": "disco",
+    "estado": "ok",
+    "bcalbum": "XXXX",
+    "formato": "CD",
+    "lanzamiento": "15 de enero 2008",
+    "precio": "12 €",
+    "btnppal": "EGBJ8QW27FBT6",
+    "description": "Havalina - Junio - CD"
   }
 }
