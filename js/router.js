@@ -9,7 +9,8 @@
     return h.startsWith('#') ? h.slice(1) : h;
   }
 
-  function routeFromHash() {
+  function routeFromHash(options = {}) {
+    const instant = !!options.instant;
     const page = getHashPath();
     if (!page) {
       // Home
@@ -20,12 +21,12 @@
       const parts = page.split('/');
       const key = parts[2] || '';
       if (key && typeof window.loadProductPage === 'function') {
-        window.loadProductPage(key);
+        window.loadProductPage(key, { instant });
         return;
       }
     }
     // Other known pages
-    if (typeof window.esconder === 'function') window.esconder(page);
+    if (typeof window.esconder === 'function') window.esconder(page, { instant });
   }
 
   function updateURL(page) {
@@ -40,8 +41,10 @@
   }
 
   function attachRouter() {
-    routeFromHash();
-    window.addEventListener('hashchange', routeFromHash);
+    // First route after reload should be instant: render final state with no menu/header animation
+    routeFromHash({ instant: true });
+    // Subsequent in-app navigations animate normally
+    window.addEventListener('hashchange', () => routeFromHash({ instant: false }));
   }
 
   // Attach when app data and UI are ready

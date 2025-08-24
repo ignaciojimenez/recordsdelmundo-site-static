@@ -123,7 +123,8 @@ function mostrar() {
     window.scrollTo(0, 0);
 }
 
-function esconder(page) {
+function esconder(page, options = {}) {
+    const instant = !!options.instant;
     const isMobile = (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia('(max-width: 768px)').matches : false;
     // Always reset scroll to top on navigation to avoid position retention
     window.scrollTo(0, 0);
@@ -145,10 +146,22 @@ function esconder(page) {
             document.getElementById("cabecera_menu1").style.marginTop = "";
             document.getElementById("cabecera_menu2").style.marginTop = "";
         } else {
-            document.getElementById("cabecera_siglas_img").style.marginTop = "-200px";
-            document.getElementById("cabecera_logo").style.marginTop = "0px";
-            document.getElementById("cabecera_menu1").style.marginTop = "-10px";
-            document.getElementById("cabecera_menu2").style.marginTop = "0px";
+            const siglas = document.getElementById("cabecera_siglas_img");
+            const logo = document.getElementById("cabecera_logo");
+            const menu1 = document.getElementById("cabecera_menu1");
+            const menu2 = document.getElementById("cabecera_menu2");
+            if (instant) {
+                [siglas, logo, menu1, menu2].forEach(el => { if (el) el.style.transition = 'none'; });
+            }
+            if (siglas) siglas.style.marginTop = "-200px";
+            if (logo) logo.style.marginTop = "0px";
+            if (menu1) menu1.style.marginTop = "-10px";
+            if (menu2) menu2.style.marginTop = "0px";
+            if (instant) {
+                // Force reflow then restore transitions for future animations
+                try { void (siglas || logo || menu1 || menu2).offsetHeight; } catch (e) {}
+                setTimeout(() => { [siglas, logo, menu1, menu2].forEach(el => { if (el) el.style.transition = ''; }); }, 0);
+            }
         }
     } else if (page.indexOf("producto") !== -1) {
         // Product page - keep current header state
@@ -160,22 +173,35 @@ function esconder(page) {
         // Tienda catalog page
         // Desktop: apply inline margins to animate/hide big header elements
         if (!isMobile) {
-            document.getElementById("cabecera_siglas_img").style.marginTop = "0px";
-            document.getElementById("cabecera_logo").style.marginTop = "-570px";
-            document.getElementById("cabecera_menu1").style.marginTop = "-40px";
-            document.getElementById("cabecera_menu2").style.marginTop = "-70px";
+            const siglas = document.getElementById("cabecera_siglas_img");
+            const logo = document.getElementById("cabecera_logo");
+            const menu1 = document.getElementById("cabecera_menu1");
+            const menu2 = document.getElementById("cabecera_menu2");
+            if (instant) {
+                [siglas, logo, menu1, menu2].forEach(el => { if (el) el.style.transition = 'none'; });
+            }
+            if (siglas) siglas.style.marginTop = "0px";
+            if (logo) logo.style.marginTop = "-570px";
+            if (menu1) menu1.style.marginTop = "-40px";
+            if (menu2) menu2.style.marginTop = "-70px";
+            if (instant) {
+                try { void (siglas || logo || menu1 || menu2).offsetHeight; } catch (e) {}
+                setTimeout(() => { [siglas, logo, menu1, menu2].forEach(el => { if (el) el.style.transition = ''; }); }, 0);
+            }
         }
     }
     
-    loadPage(page);
+    loadPage(page, { instant });
 }
 
-function loadPage(page) {
+function loadPage(page, options = {}) {
+    const instant = !!options.instant;
     const isMobile = (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia('(max-width: 768px)').matches : false;
-    hideContent();
+    hideContent({ instant });
     // Ensure we are at the top when loading a new page
     window.scrollTo(0, 0);
     
+    const delay = instant ? 0 : (isMobile ? 0 : 1000);
     setTimeout(() => {
         clearActiveMenus();
         setActiveMenu(page);
@@ -234,24 +260,28 @@ function loadPage(page) {
         const socialBar = document.querySelector('.lateral_dch');
         if (isMobile && page === 'tienda') {
             // Measure current header height BEFORE switching to .is-store (pre-shrink size)
-            const header = document.getElementById('cabecera_siglas_img');
-            const preShrinkHeight = header ? Math.ceil(header.getBoundingClientRect().height) : 176;
-            // Set initial spacing so content clears the current large header
-            contenido.style.marginTop = `${preShrinkHeight + 8}px`;
-
-            // Now switch to store layout and move social bar
-            document.body.classList.add('is-store');
-            if (socialBar && contenido) {
-                contenido.after(socialBar);
-            }
-
-            // Animate spacing down to the compact gap while the header shrinks via CSS
-            if (window.requestAnimationFrame) {
-                requestAnimationFrame(() => {
-                    contenido.style.marginTop = '8px';
-                });
+            if (instant) {
+                document.body.classList.add('is-store');
+                if (socialBar && contenido) contenido.after(socialBar);
+                contenido.style.marginTop = '8px';
             } else {
-                setTimeout(() => { contenido.style.marginTop = '8px'; }, 0);
+                const header = document.getElementById('cabecera_siglas_img');
+                const preShrinkHeight = header ? Math.ceil(header.getBoundingClientRect().height) : 176;
+                // Set initial spacing so content clears the current large header
+                contenido.style.marginTop = `${preShrinkHeight + 8}px`;
+                // Now switch to store layout and move social bar
+                document.body.classList.add('is-store');
+                if (socialBar && contenido) {
+                    contenido.after(socialBar);
+                }
+                // Animate spacing down to the compact gap while the header shrinks via CSS
+                if (window.requestAnimationFrame) {
+                    requestAnimationFrame(() => {
+                        contenido.style.marginTop = '8px';
+                    });
+                } else {
+                    setTimeout(() => { contenido.style.marginTop = '8px'; }, 0);
+                }
             }
         } else {
             document.body.classList.remove('is-store');
@@ -265,7 +295,7 @@ function loadPage(page) {
         currentPage = page;
         
         // Show content (no animation on mobile to avoid flicker)
-        const inDuration = isMobile ? 0 : (page === 'tienda' ? 1100 : 900);
+        const inDuration = (instant || isMobile) ? 0 : (page === 'tienda' ? 1100 : 900);
         if (inDuration === 0) {
             $('.contenido').show();
         } else {
@@ -279,10 +309,11 @@ function loadPage(page) {
             $('.lateral_izq_inferior').hide();
         }
         
-    }, isMobile ? 0 : 1000);
+    }, delay);
 }
 
-function loadProductPage(productKey) {
+function loadProductPage(productKey, options = {}) {
+    const instant = !!options.instant;
     const isMobile = (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia('(max-width: 768px)').matches : false;
     // Stop any ongoing animations first
     $('.contenido').stop(true, true);
@@ -295,12 +326,19 @@ function loadProductPage(productKey) {
     window.scrollTo(0, 0);
     
     // Set tienda header layout for product pages
-    document.getElementById("cabecera_siglas_img").style.marginTop = "0px";
-    document.getElementById("cabecera_logo").style.marginTop = "-570px";
-    document.getElementById("cabecera_menu1").style.marginTop = "-40px";
-    document.getElementById("cabecera_menu2").style.marginTop = "-70px";
+    const siglas = document.getElementById("cabecera_siglas_img");
+    const logo = document.getElementById("cabecera_logo");
+    const menu1 = document.getElementById("cabecera_menu1");
+    const menu2 = document.getElementById("cabecera_menu2");
+    if (instant) { [siglas, logo, menu1, menu2].forEach(el => { if (el) el.style.transition = 'none'; }); }
+    if (siglas) siglas.style.marginTop = "0px";
+    if (logo) logo.style.marginTop = "-570px";
+    if (menu1) menu1.style.marginTop = "-40px";
+    if (menu2) menu2.style.marginTop = "-70px";
+    if (instant) { try { void (siglas || logo || menu1 || menu2).offsetHeight; } catch (e) {} setTimeout(() => { [siglas, logo, menu1, menu2].forEach(el => { if (el) el.style.transition = ''; }); }, 0); }
     
     // Shorter timeout to reduce race conditions
+    const delay = instant ? 0 : (isMobile ? 150 : 300);
     setTimeout(() => {
         clearActiveMenus();
         setActiveMenu('tienda');
@@ -343,21 +381,19 @@ function loadProductPage(productKey) {
         currentPage = `tienda/producto/${productKey}`;
         
         // Note: Removed call to undefined bindPendingButtonHandlers() (was causing ReferenceError)
-    }, isMobile ? 150 : 300);
+    }, delay);
 }
 
-function hideContent() {
+function hideContent(options = {}) {
+    const instant = !!options.instant;
     const isMobile = (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia('(max-width: 768px)').matches : false;
-    console.log('=== HIDE CONTENT DEBUG ===');
-    console.log('Hiding content, current display:', document.getElementById('contenido').style.display);
-    if (isMobile) {
+    if (instant || isMobile) {
         $(".contenido").hide();
         $(".lateral_izq_inferior").hide();
-    } else {
-        $(".contenido").fadeOut(1000);
-        $(".lateral_izq_inferior").fadeOut(1000);
+        return;
     }
-    console.log('=== END HIDE CONTENT DEBUG ===');
+    $(".contenido").fadeOut(1000);
+    $(".lateral_izq_inferior").fadeOut(1000);
 }
 
 function clearActiveMenus() {
