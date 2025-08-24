@@ -5,13 +5,12 @@
     "tipo": "disco",
     "estado": "reedit",
     "bcalbum": "4042535803",
-    "img": "ellejanooyente",
     "formato": "CD",
     "lanzamiento": "Enero 2009",
     "precio": "10 €",
     "btnppal": "XXXXXX",
     "paypal_item_id": "ellejanooyente",
-    "paypal_description": "ATENCIÓN TSUNAMI - EL LEJANO OYENTE - CD"
+    "description": "ATENCIÓN TSUNAMI - EL LEJANO OYENTE - CD"
   },
   "elcuerpohumano": {
     "nombre": "elcuerpohumano",
@@ -19,13 +18,12 @@
     "tipo": "disco",
     "estado": "ok",
     "bcalbum": "3660433808",
-    "img": "elcuerpohumano",
     "formato": "Vinilo 12 '' + CD",
     "lanzamiento": "Marzo 2013",
     "precio": "10 €",
     "btnppal": "JWBCF2Z2THEAL",
     "paypal_item_id": "elcuerpohumano",
-    "paypal_description": "INCENDIOS - EL CUERPO HUMANO - Vinilo 12'' + CD"
+    "description": "INCENDIOS - EL CUERPO HUMANO - Vinilo 12'' + CD"
   },
   "quelecortenlacabeza": {
     "nombre": "quelecortenlacabeza",
@@ -33,13 +31,12 @@
     "tipo": "disco",
     "estado": "ok",
     "bcalbum": "2497391259",
-    "img": "quelecortenlacabeza",
     "formato": "Vinilo 12 '' + CD",
     "lanzamiento": "6 de Mayo 2014",
     "precio": "14 €",
     "btnppal": "H822EQF8KJFZY",
     "paypal_item_id": "quelecortenlacabeza",
-    "paypal_description": "ATENCIÓN TSUNAMI - QUE LE CORTEN LA CABEZA - Vinilo 12'' + CD"
+    "description": "ATENCIÓN TSUNAMI - QUE LE CORTEN LA CABEZA - Vinilo 12'' + CD"
   },
   "pensamientodepaz": {
     "nombre": "pensamientodepaz",
@@ -47,13 +44,12 @@
     "tipo": "disco",
     "estado": "ok",
     "bcalbum": "2016021601",
-    "img": "pensamientodepaz",
     "formato": "Vinilo 10 '' + CD",
     "lanzamiento": "1 de Abril 2015",
     "precio": "12 €",
     "btnppal": "T3E8MJV8Z4WXL",
     "paypal_item_id": "pensamientodepaz",
-    "paypal_description": "PARACAÍDAS - PENSAMIENTO DE PAZ DURANTE UN ATAQUE AÉREO - Vinilo 10'' + CD"
+    "description": "PARACAÍDAS - PENSAMIENTO DE PAZ DURANTE UN ATAQUE AÉREO - Vinilo 10'' + CD"
   },
   "sillasvoladoras": {
     "nombre": "sillasvoladoras",
@@ -61,13 +57,12 @@
     "tipo": "disco",
     "estado": "ok",
     "bcalbum": "2920496214",
-    "img": "sillasvoladoras",
     "formato": "Vinilo 12 '' + CD",
     "lanzamiento": "28 de octubre 2015",
     "precio": "14 €",
     "btnppal": "Y7UF6SU9FWJ4Y",
     "paypal_item_id": "sillasvoladoras",
-    "paypal_description": "INCENDIOS - LAS SILLAS VOLADORAS - Vinilo 12'' + CD"
+    "description": "INCENDIOS - LAS SILLAS VOLADORAS - Vinilo 12'' + CD"
   },
   "silencioretaguardia": {
     "nombre": "silencioretaguardia",
@@ -75,13 +70,12 @@
     "tipo": "disco",
     "estado": "reedit",
     "bcalbum": "1439761701",
-    "img": "silencioretaguardia",
     "formato": "Vinilo 12 ''",
     "lanzamiento": "4 de noviembre 2016",
     "precio": "14 €",
     "btnppal": "L593YRTBFUQNQ",
     "paypal_item_id": "silencioretaguardia",
-    "paypal_description": "ATENCIÓN TSUNAMI - SILENCIO EN LA RETAGUARDIA - Vinilo 12''"
+    "description": "ATENCIÓN TSUNAMI - SILENCIO EN LA RETAGUARDIA - Vinilo 12''"
   },
   "realejo": {
     "nombre": "realejo",
@@ -89,27 +83,25 @@
     "tipo": "disco",
     "estado": "nobandcamp",
     "bcalbum": "",
-    "img": "realejo",
     "formato": "Vinilo 12 ''",
     "lanzamiento": "17 de noviembre 2017",
     "precio": "16.95 €",
     "btnppal": "HZ8YS7QQPTD2A",
     "paypal_item_id": "realejo",
-    "paypal_description": "AUTUMN COMETS - REALEJO - Vinilo 12''"
+    "description": "AUTUMN COMETS - REALEJO - Vinilo 12''"
   },
   "vltra": {
     "nombre": "vltra",
-    "grupo": "atenciotsunami",
+    "grupo": "atenciontsunami",
     "tipo": "disco",
     "estado": "ok",
     "bcalbum": "828241542",
-    "img": "vltra",
     "formato": "Vinilo 12 ''",
     "lanzamiento": "29 de marzo 2019",
     "precio": "15 €",
     "btnppal": "B3CXXUNP5ZYM2",
     "paypal_item_id": "vltra",
-    "paypal_description": "ATENCIÓN TSUNAMI - VLTRA - Vinilo 12''"
+    "description": "ATENCIÓN TSUNAMI - VLTRA - Vinilo 12''"
   },
   "pensamientomagico": {
     "nombre": "pensamientomagico",
@@ -117,14 +109,13 @@
     "tipo": "disco",
     "estado": "bandcamp",
     "bcalbum": "3716877208",
-    "img": "pensamientomagico",
     "formato": "Vinilo 12 ''",
     "lanzamiento": "9 de marzo 2021",
     "precio": "18 €",
     "btnppal": "",
     "bcurl": "https://disciplinaatlantico.bandcamp.com/album/pensamiento-m-gico",
     "paypal_item_id": "pensamientomagico",
-    "paypal_description": "DISCIPLINA ATLÁNTICO - PENSAMIENTO MÁGICO - Vinilo 12''"
+    "description": "DISCIPLINA ATLÁNTICO - PENSAMIENTO MÁGICO - Vinilo 12''"
   },
   "metavolante": {
     "nombre": "metavolante",
@@ -132,12 +123,11 @@
     "tipo": "disco",
     "estado": "ok",
     "bcalbum": "2299872180",
-    "img": "metavolante",
     "formato": "Vinilo 12 ''",
     "lanzamiento": "16 de abril 2021",
     "precio": "15 €",
     "btnppal": "EVZKN57KTS6NW",
     "paypal_item_id": "metavolante",
-    "paypal_description": "META VOLANTE - Vinilo 12''"
+    "description": "META VOLANTE - Vinilo 12''"
   }
 }

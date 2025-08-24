@@ -48,34 +48,86 @@ function renderInfoPage() {
     return html;
 }
 
+// Parse Spanish month date strings like "6 de Mayo 2014" or "Enero 2009" into a sortable timestamp
+function parseSpanishDate(dateStr) {
+    if (!dateStr || typeof dateStr !== 'string') return 0;
+    const s = dateStr.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // strip accents
+    const months = {
+        'enero': 0,
+        'febrero': 1,
+        'marzo': 2,
+        'abril': 3,
+        'mayo': 4,
+        'junio': 5,
+        'julio': 6,
+        'agosto': 7,
+        'septiembre': 8,
+        'setiembre': 8,
+        'octubre': 9,
+        'noviembre': 10,
+        'diciembre': 11
+    };
+    // 1) dd de mes yyyy
+    let m = s.match(/^(\d{1,2})\s+de\s+([a-z]+)\s+(\d{4})$/);
+    if (m) {
+        const d = parseInt(m[1], 10);
+        const mon = months[m[2]] ?? 0;
+        const y = parseInt(m[3], 10);
+        return new Date(y, mon, d).getTime();
+    }
+    // 2) mes yyyy
+    m = s.match(/^([a-z]+)\s+(\d{4})$/);
+    if (m) {
+        const mon = months[m[1]] ?? 0;
+        const y = parseInt(m[2], 10);
+        return new Date(y, mon, 1).getTime();
+    }
+    // 3) yyyy only fallback
+    m = s.match(/(\d{4})/);
+    if (m) {
+        const y = parseInt(m[1], 10);
+        return new Date(y, 0, 1).getTime();
+    }
+    return 0;
+}
+
 function renderTiendaPage() {
     let html = '';
     
-    // Product grid
-    const products = [
-        { key: 'metavolante', title: 'META VOLANTE - LP', price: '€15' },
-        { key: 'pensamientomagico', title: 'DISCIPLINA ATLÁNTICO - PENSAMIENTO MÁGICO - LP', price: '€18' },
-        { key: 'vltra', title: 'ATENCIÓN TSUNAMI - VLTRA - LP', price: '€15' },
-        { key: 'realejo', title: 'AUTUMN COMETS - REALEJO - LP', price: '€16,95' },
-        { key: 'silencioretaguardia', title: 'ATENCIÓN TSUNAMI - SILENCIO EN LA RETAGUARDIA - LP', price: 'SOLD OUT - GRATIS ONLINE' },
-        { key: 'sillasvoladoras', title: 'INCENDIOS - LAS SILLAS VOLADORAS - LP', price: '€14' },
-        { key: 'pensamientodepaz', title: 'PARACAÍDAS - PENSAMIENTO DE PAZ DURANTE UN ATAQUE AÉREO - EP', price: '€12' },
-        { key: 'quelecortenlacabeza', title: 'ATENCIÓN TSUNAMI - QUE LE CORTEN LA CABEZA - LP', price: '€14' },
-        { key: 'elcuerpohumano', title: 'INCENDIOS - EL CUERPO HUMANO- EP', price: '€12' },
-        { key: 'ellejanooyente', title: 'ATENCIÓN TSUNAMI - EL LEJANO OYENTE - LP', price: 'SOLD OUT - GRATIS ONLINE' }
-    ];
-    
-    products.forEach(product => {
+    // Build product grid from loaded data and sort by lanzamiento (newest first)
+    const data = (typeof window !== 'undefined' && window.productData) ? window.productData : {};
+    Object.keys(data)
+      .map(key => ({ key, product: data[key] }))
+      .filter(entry => entry.product && entry.product.tipo === 'disco')
+      .sort((a, b) => {
+        const ta = parseSpanishDate(a.product.lanzamiento);
+        const tb = parseSpanishDate(b.product.lanzamiento);
+        const diff = tb - ta; // newest first
+        if (diff !== 0) return diff;
+        const na = (a.product.nombre || a.key || '').toString();
+        const nb = (b.product.nombre || b.key || '').toString();
+        return na.localeCompare(nb, 'es', { sensitivity: 'base' });
+      })
+      .forEach(({ key, product }) => {
+        const title = product.description || `${(product.grupo || '').toUpperCase()} - ${(product.nombre || '').toUpperCase()}`.trim();
+        const rawPrice = product.precio || '';
+        // Normalize price display: move € to a leading span when present
+        let priceHtml = rawPrice;
+        if (rawPrice.includes('€')) {
+            const numberPart = rawPrice.replace('€', '').trim();
+            priceHtml = `<span class="currency_sign">€</span>${numberPart}`;
+        }
+        const thumbKey = product.nombre || key;
         html += `
             <div class="product">
-                <a href="#" onclick="loadProductPage('${product.key}')" title="Ver ${product.title}">
+                <a href="#" onclick="loadProductPage('${key}')" title="Ver ${title}">
                     <div class="product_header">
-                        <h2>${product.title}</h2>
+                        <h2>${title}</h2>
                         <span class="dash"></span>
-                        <h3>${product.price.includes('€') ? '<span class="currency_sign">€</span>' + product.price.replace('€', '') : product.price}</h3>
+                        <h3>${priceHtml || ''}</h3>
                     </div>
                     <div class="product_thumb">
-                        <img src="images/tienda/${product.key}.jpg" class="fade_in" alt="Image of ${product.title}">
+                        <img src="images/tienda/${thumbKey}.jpg" class="fade_in" alt="Image of ${title}">
                     </div>
                 </a>
             </div>
@@ -106,7 +158,7 @@ function renderProductPage(productKey) {
     
     // Left div - Product image and purchase info (except nobandcamp)
     html += `<div class='imagenDisco' style='text-align:left;font-family:Arial; font-size:12px; float:left; width:280px;'>`;
-    html += `<img src='images/tienda/${product.img}.jpg' width='280'/>`;
+    html += `<img src='images/tienda/${product.nombre || productKey}.jpg' width='280'/>`;
     
     if (product.estado === "ok") {
         html += `<br><strong>Formato:</strong> ${product.formato}`;
