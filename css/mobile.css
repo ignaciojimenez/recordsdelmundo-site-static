@@ -167,12 +167,14 @@ body:not(.is-store) .contenido img { max-width: 100% !important; height: auto !i
 #bc { width: 100% !important; height: 400px !important; border: 0; }
 
 /* PayPal / buttons: unify sizing */
-.paypal-form-container, .descarga { margin-top: 10px !important; }
-.paypal-comprar-btn, .descarga { display: inline-flex !important; align-items: center; justify-content: center; min-height: 44px; padding: 10px 14px !important; font-size: 14px !important; border-radius: 6px !important; }
+.paypal-form-container, .descarga { margin-top: 8px !important; }
+.paypal-comprar-btn, .descarga { display: inline-flex !important; align-items: center; justify-content: center; min-height: 36px; padding: 8px 12px !important; font-size: 13px !important; border-radius: 6px !important; line-height: 1.2; }
 
 /* Back button (for product pages) */
 .lateral_izq_inferior { position: fixed !important; bottom: 70px !important; left: 10px !important; width: auto !important; height: auto !important; margin: 0 !important; z-index: 60; }
 .back { width: 30px !important; height: 30px !important; background-size: contain !important; }
+/* Hide back arrow entirely on mobile product pages */
+.is-product .lateral_izq_inferior { display: none !important; }
 
 /* Images inside content */
 .contenido .imagen { width: 100% !important; height: auto; border-radius: 6px; }
@@ -180,3 +182,7 @@ body:not(.is-store) .contenido img { max-width: 100% !important; height: auto !i
 
 /* Ensure JS-set large margins don't push content too far on mobile */
 .contenido { margin-top: 12px !important; }
+
+/* Product page on mobile: socials in-flow at bottom (not fixed) */
+.is-product .lateral_dch { position: static !important; bottom: auto !important; top: auto !important; left: auto !important; right: auto !important; width: 100% !important; margin: 16px 0 0 !important; text-align: center !important; }
+.is-product .centro { padding-bottom: 0 !important; }

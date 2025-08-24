@@ -96,6 +96,7 @@ function mostrar() {
     document.body.classList.remove('is-section');
     document.body.classList.remove('is-band');
     document.body.classList.remove('is-info');
+    document.body.classList.remove('is-product');
     // Ensure store-specific flow is turned off and social bar restored to original slot
     document.body.classList.remove('is-store');
     document.body.classList.remove('is-store-outgoing');
@@ -180,6 +181,10 @@ function loadPage(page) {
         setActiveMenu(page);
         // Non-home pages: mark as section for mobile header compaction
         document.body.classList.add('is-section');
+        // Ensure product-specific behavior is cleared for non-product routes
+        if (!page.startsWith('tienda/producto/')) {
+            document.body.classList.remove('is-product');
+        }
         // Mark info page for mobile-specific social behavior
         if (page === 'info') {
             document.body.classList.add('is-info');
@@ -267,9 +272,11 @@ function loadPage(page) {
             $('.contenido').fadeIn(inDuration);
         }
         
-        // Show back button only for product pages
-        if (page.startsWith('tienda/producto/')) {
-            $('.lateral_izq_inferior').fadeIn(isMobile ? 200 : 900);
+        // Back arrow: only show on desktop product pages
+        if (page.startsWith('tienda/producto/') && !isMobile) {
+            $('.lateral_izq_inferior').fadeIn(900);
+        } else {
+            $('.lateral_izq_inferior').hide();
         }
         
     }, isMobile ? 0 : 1000);
@@ -299,13 +306,21 @@ function loadProductPage(productKey) {
         setActiveMenu('tienda');
         // Product detail is a section
         document.body.classList.add('is-section');
+        // Mark as product page for mobile-specific social behavior
+        document.body.classList.add('is-product');
         // Make sure store flow is disabled and social bar is in its original place
         document.body.classList.remove('is-store');
         const container = document.querySelector('.container');
         const centro = document.querySelector('.centro');
         const socialBar = document.querySelector('.lateral_dch');
         if (container && centro && socialBar && container.contains(centro)) {
-            container.insertBefore(socialBar, centro);
+            if (isMobile) {
+                // On mobile product pages, place socials after the content (in-flow at bottom)
+                const contenidoEl = document.getElementById('contenido');
+                if (contenidoEl) contenidoEl.after(socialBar);
+            } else {
+                container.insertBefore(socialBar, centro);
+            }
         }
         
         const contenido = document.getElementById('contenido');
@@ -314,12 +329,16 @@ function loadProductPage(productKey) {
         contenido.innerHTML = productHtml;
         contenido.className = 'contenido';
         contenido.style.display = 'block';
-        contenido.style.marginTop = '400px';
+        contenido.style.marginTop = isMobile ? '12px' : '400px';
         
         // Show content immediately and reliably
         $(contenido).show();
         $('.imagenDisco').show();
-        $('.lateral_izq_inferior').show();
+        if (isMobile) {
+            $('.lateral_izq_inferior').hide();
+        } else {
+            $('.lateral_izq_inferior').show();
+        }
         
         currentPage = `tienda/producto/${productKey}`;
         
