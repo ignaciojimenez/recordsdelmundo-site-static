@@ -64,7 +64,7 @@ body:not(.is-store) .contenido img { max-width: 100% !important; height: auto !i
 #cabecera_siglas_img { overflow: hidden; max-height: 180px; transition: max-height 250ms ease, padding-top 250ms ease; text-align: center; margin-bottom: 8px; }
 #cabecera_siglas_img a { display: block; }
 /* Animate image height directly for a true shrink instead of cropping */
-#cabecera_siglas_img img { display: block; height: auto; width: auto; max-width: 100%; margin: 0 auto; transform-origin: top center; max-height: 160px; transition: max-height 250ms ease; }
+#cabecera_siglas_img img { display: block; height: auto; width: auto; max-width: 100%; margin: 0 auto; transform-origin: top center; max-height: clamp(96px, 18vh, 140px); transition: max-height 250ms ease; }
 /* Ensure big home logo scales within mobile width */
 #cabecera_logo img { max-width: 100%; height: auto; }
 /* Visible, compact, safe-area-aware in store */
@@ -80,7 +80,7 @@ body:not(.is-store) .contenido img { max-width: 100% !important; height: auto !i
 
 /* Home/menu layout on mobile: stack and center items, smaller sizes */
 .cabecera_logo { margin-top: clamp(20px, 3vh, 40px) !important; text-align: center !important; }
-.cabecera_logo img { max-width: 78% !important; height: auto !important; margin: 0 auto !important; display: block !important; }
+.cabecera_logo img { max-width: 72% !important; height: auto !important; margin: 0 auto !important; display: block !important; }
 
 .cabecera_menu1 { text-align: center !important; margin-top: clamp(32px, 6vh, 72px) !important; font-size: 16px !important; transform: none !important; letter-spacing: 0.6px !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 10px !important; height: auto !important; margin-bottom: 14px !important; }
 .cabecera_menu1 a { display: inline-block !important; padding: 10px 6px !important; min-height: 44px !important; line-height: 1.5 !important; background: transparent !important; -webkit-tap-highlight-color: rgba(0,0,0,0.05); }
