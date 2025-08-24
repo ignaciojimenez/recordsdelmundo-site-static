@@ -71,6 +71,13 @@ body:not(.is-store) .contenido img { max-width: 100% !important; height: auto !i
 .is-store #cabecera_siglas_img { display: block !important; margin-top: 0 !important; padding-top: calc(env(safe-area-inset-top, 0px) + 8px) !important; margin-bottom: 8px !important; cursor: pointer; max-height: 44px !important; text-align: center !important; }
 .is-store #cabecera_siglas_img img { max-height: 36px !important; display: inline-block; }
 
+/* Content pages on mobile: compact header like store, keep social behavior */
+.is-section #cabecera_logo { display: none !important; margin-top: 0 !important; }
+.is-section #cabecera_menu1, .is-section #cabecera_menu2 { display: none !important; margin-top: 0 !important; }
+.is-section #cabecera_siglas_img { display: block !important; margin-top: 0 !important; padding-top: calc(env(safe-area-inset-top, 0px) + 8px) !important; margin-bottom: 8px !important; cursor: pointer; max-height: 44px !important; text-align: center !important; }
+.is-section #cabecera_siglas_img img { max-height: 36px !important; }
+.is-section .contenido { margin-top: 8px !important; }
+
 /* (Removed outgoing animation state to stabilize behavior) */
 
 /* Minimal gap below the small header on store mobile, with smooth transition */

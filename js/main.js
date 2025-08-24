@@ -34,12 +34,12 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (dataLoaded) {
         // Set initial state - show home page
         mostrar();
-        // Make the RDM header clickable to go home on mobile when in store
+        // Make the RDM header clickable to go home on mobile when in store or content pages
         const siglas = document.getElementById('cabecera_siglas_img');
         if (siglas) {
             siglas.addEventListener('click', function(e) {
                 const isMobile = (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia('(max-width: 768px)').matches : false;
-                if (isMobile && document.body.classList.contains('is-store')) {
+                if (isMobile && (document.body.classList.contains('is-store') || document.body.classList.contains('is-section'))) {
                     e.preventDefault();
                     // Clean up any transient classes/inline styles and go home directly
                     document.body.classList.remove('is-store-outgoing');
@@ -106,10 +106,18 @@ function esconder(page) {
         // Reset any store-specific inline spacing
         const centroEl = document.querySelector('.centro');
         if (centroEl) centroEl.style.paddingTop = '';
-        document.getElementById("cabecera_siglas_img").style.marginTop = "-200px";
-        document.getElementById("cabecera_logo").style.marginTop = "0px";
-        document.getElementById("cabecera_menu1").style.marginTop = "-10px";
-        document.getElementById("cabecera_menu2").style.marginTop = "0px";
+        if (isMobile) {
+            // Mobile content pages: do not apply desktop inline header animations; let CSS (.is-section) drive layout
+            document.getElementById("cabecera_siglas_img").style.marginTop = "";
+            document.getElementById("cabecera_logo").style.marginTop = "";
+            document.getElementById("cabecera_menu1").style.marginTop = "";
+            document.getElementById("cabecera_menu2").style.marginTop = "";
+        } else {
+            document.getElementById("cabecera_siglas_img").style.marginTop = "-200px";
+            document.getElementById("cabecera_logo").style.marginTop = "0px";
+            document.getElementById("cabecera_menu1").style.marginTop = "-10px";
+            document.getElementById("cabecera_menu2").style.marginTop = "0px";
+        }
     } else if (page.indexOf("producto") !== -1) {
         // Product page - keep current header state
         document.body.classList.remove('is-store');
