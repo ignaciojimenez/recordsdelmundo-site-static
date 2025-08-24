@@ -126,28 +126,7 @@ html, body {
 		min-width: 150px;
 		visibility:hidden;
 	}
-	.lateral_izq_inferior {
-		height: 100%;
-		float: left;
-		width: 20%;
-		min-width: 150px;
-		position:fixed;
-		top:120px;
-		text-align:center;
-		display:none;
-	}
-	.back{
-		height:80px;
-		width:80px;
-		display:inline-block;
-		background:transparent url('../images/iconos/back.png') center top no-repeat;
-	}
-	.back:hover{
-		background-image: url('../images/iconos/back_gray.png');
-		text-decoration: none;
-		color:#000;
-		background-color:transparent;
-	}
+	/* Back button removed */
 /****************************************************
 *		LATERAL DERECHA								*
 ****************************************************/

@@ -36,10 +36,6 @@
     }
   }
 
-  function backToTienda() {
-    updateURL('tienda');
-  }
-
   function attachRouter() {
     // First route after reload should be instant: render final state with no menu/header animation
     routeFromHash({ instant: true });
@@ -52,5 +48,4 @@
 
   // Expose minimal API used by main.js and HTML
   window.updateURL = updateURL;
-  window.backToTienda = backToTienda;
 })();

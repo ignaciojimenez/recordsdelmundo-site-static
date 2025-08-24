@@ -91,7 +91,6 @@ function mostrar() {
     document.getElementById("cabecera_logo").style.marginTop = "65px";
     document.getElementById("cabecera_menu1").style.marginTop = "23px";
     document.getElementById("cabecera_menu2").style.marginTop = "13px";
-    document.getElementsByClassName("lateral_izq_inferior")[0].style.marginTop = "400px";
     // Home: remove section/band classes so large header is visible
     document.body.classList.remove('is-section');
     document.body.classList.remove('is-band');
@@ -115,7 +114,6 @@ function mostrar() {
     const contenido = document.getElementById('contenido');
     contenido.innerHTML = '';
     contenido.style.display = 'none';
-    $('.lateral_izq_inferior').hide();
 
     currentPage = '';
 
@@ -302,12 +300,7 @@ function loadPage(page, options = {}) {
             $('.contenido').fadeIn(inDuration);
         }
         
-        // Back arrow: only show on desktop product pages
-        if (page.startsWith('tienda/producto/') && !isMobile) {
-            $('.lateral_izq_inferior').fadeIn(900);
-        } else {
-            $('.lateral_izq_inferior').hide();
-        }
+        // Back arrow removed: no-op
         
     }, delay);
 }
@@ -318,11 +311,9 @@ function loadProductPage(productKey, options = {}) {
     // Stop any ongoing animations first
     $('.contenido').stop(true, true);
     $('.imagenDisco').stop(true, true);
-    $('.lateral_izq_inferior').stop(true, true);
     
     // Hide content immediately without animation
     $('.contenido').hide();
-    $('.lateral_izq_inferior').hide();
     window.scrollTo(0, 0);
     
     // Set tienda header layout for product pages
@@ -372,11 +363,7 @@ function loadProductPage(productKey, options = {}) {
         // Show content immediately and reliably
         $(contenido).show();
         $('.imagenDisco').show();
-        if (isMobile) {
-            $('.lateral_izq_inferior').hide();
-        } else {
-            $('.lateral_izq_inferior').show();
-        }
+        // Back arrow removed
         
         currentPage = `tienda/producto/${productKey}`;
         
@@ -389,11 +376,9 @@ function hideContent(options = {}) {
     const isMobile = (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia('(max-width: 768px)').matches : false;
     if (instant || isMobile) {
         $(".contenido").hide();
-        $(".lateral_izq_inferior").hide();
         return;
     }
     $(".contenido").fadeOut(1000);
-    $(".lateral_izq_inferior").fadeOut(1000);
 }
 
 function clearActiveMenus() {
@@ -416,6 +401,6 @@ function setActiveMenu(page) {
     }
 }
 
-// updateURL() and backToTienda() are provided by router.js
+// updateURL() is provided by router.js
 
 // Removed legacy printmail() helper; content uses direct mailto links now
