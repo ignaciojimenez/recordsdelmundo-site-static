@@ -4,6 +4,16 @@ let currentPage = '';
 let productData = {};
 let pageContent = {};
 
+// Debug logging helper (toggle with window.__rdm_debug = true/false)
+try { if (typeof window !== 'undefined' && typeof window.__rdm_debug === 'undefined') window.__rdm_debug = true; } catch (_) {}
+function rdmLog() {
+    try { if (typeof window !== 'undefined' && window.__rdm_debug) console.log('[RDM]', ...arguments); } catch (_) {}
+}
+try { if (typeof window !== 'undefined') window.rdmLog = rdmLog; } catch (_) {}
+// Track last input event to correlate with hashchange
+try { if (typeof window !== 'undefined' && typeof window.__rdm_last_input === 'undefined') window.__rdm_last_input = null; } catch (_) {}
+try { if (typeof window !== 'undefined' && typeof window.__rdm_click_nav === 'undefined') window.__rdm_click_nav = false; } catch (_) {}
+
 // Load JSON data files
 async function loadData() {
     try {
@@ -56,23 +66,94 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Attempt to minimize browser chrome on mobile across a few lifecycle events
         setTimeout(nudgeMobileChrome, 300);
         window.addEventListener('orientationchange', () => setTimeout(nudgeMobileChrome, 250));
+        // Detect horizontal swipe gestures (trackpads/mice). We set a short-lived flag
+        // that we use to gate instant navigation and BFCache no-anim behavior.
+        const markSwipe = (ev) => {
+            try {
+                const dx = Math.abs(ev.deltaX || 0);
+                const dy = Math.abs(ev.deltaY || 0);
+                // Heuristic: large horizontal movement with little vertical
+                if (dx > 20 && dy < 10) {
+                    rdmLog('swipe-detected', { dx, dy });
+                    window.__rdm_swipe_nav = true;
+                    clearTimeout(window.__rdm_swipe_nav_timer);
+                    window.__rdm_swipe_nav_timer = setTimeout(() => { window.__rdm_swipe_nav = false; }, 1000);
+                }
+                else if (dx > 6) {
+                    rdmLog('wheel-horizontal', { dx, dy, recognized: false });
+                }
+                window.__rdm_last_input = { type: 'wheel', dx, dy, t: Date.now() };
+            } catch (_) {}
+        };
+        window.addEventListener('wheel', markSwipe, { passive: true });
+        // Some browsers still emit legacy mousewheel
+        window.addEventListener('mousewheel', (ev) => {
+            try {
+                const dx = Math.abs(ev.wheelDeltaX ? -ev.wheelDeltaX : (ev.deltaX || 0));
+                const dy = Math.abs(ev.wheelDeltaY ? -ev.wheelDeltaY : (ev.deltaY || 0));
+                rdmLog('mousewheel', { dx, dy });
+                window.__rdm_last_input = { type: 'wheel', dx, dy, t: Date.now() };
+            } catch (_) {}
+        }, { passive: true });
+
+        // Capture keyboard-based back/forward for analysis
+        window.addEventListener('keydown', (ev) => {
+            try {
+                const combo = {
+                    key: ev.key,
+                    altKey: !!ev.altKey,
+                    metaKey: !!ev.metaKey,
+                    ctrlKey: !!ev.ctrlKey,
+                };
+                if (ev.key === 'ArrowLeft' || ev.key === 'ArrowRight' || (ev.metaKey && (ev.key === '[' || ev.key === ']')) || (ev.altKey && (ev.key === 'ArrowLeft' || ev.key === 'ArrowRight'))) {
+                    rdmLog('keydown-nav', combo);
+                } else if (window.__rdm_debug && (ev.key === 'Backspace')) {
+                    rdmLog('keydown-backspace', combo);
+                }
+                window.__rdm_last_input = { type: 'keydown', key: ev.key, altKey: !!ev.altKey, metaKey: !!ev.metaKey, ctrlKey: !!ev.ctrlKey, t: Date.now() };
+            } catch (_) {}
+        }, { passive: true });
+
         window.addEventListener('pageshow', (e) => {
-            // If coming from BFCache/back-forward restore, avoid re-animating UI
-            if (e && e.persisted) {
+            // Detect BFCache restore broadly (desktop + mobile)
+            const navEntry = (typeof performance !== 'undefined' && performance.getEntriesByType) ? performance.getEntriesByType('navigation')[0] : null;
+            const isBackForward = !!(navEntry && navEntry.type === 'back_forward');
+            const isPersisted = !!(e && e.persisted);
+            rdmLog('pageshow', { persisted: isPersisted, navType: navEntry ? navEntry.type : undefined, isBackForward });
+            if (isPersisted || isBackForward) {
+                rdmLog('pageshow-apply-no-anim');
                 window.__rdm_restoring = true;
                 try { document.body.classList.add('no-anim'); } catch (_) {}
                 const clearFlag = () => {
+                    rdmLog('pageshow-clear-no-anim');
                     window.__rdm_restoring = false;
                     try { document.body.classList.remove('no-anim'); } catch (_) {}
                 };
+                // Give desktop a bit more time; settle paint before re-enabling animations
+                const ms = 200;
                 if (window.requestAnimationFrame) {
-                    requestAnimationFrame(() => setTimeout(clearFlag, 50));
+                    requestAnimationFrame(() => setTimeout(clearFlag, ms));
                 } else {
-                    setTimeout(clearFlag, 200);
+                    setTimeout(clearFlag, ms);
                 }
+                // Clear swipe flag (if any) after applying restore handling
+                window.__rdm_swipe_nav = false;
             }
             setTimeout(nudgeMobileChrome, 150);
         });
+        // Mark in-app anchor clicks so router can classify navigation source reliably
+        let __rdm_click_timer = null;
+        document.addEventListener('click', (ev) => {
+            try {
+                const a = ev.target && ev.target.closest ? ev.target.closest('a[href^="#"]') : null;
+                if (a) {
+                    window.__rdm_click_nav = true;
+                    rdmLog('click-nav', { href: a.getAttribute('href') });
+                    clearTimeout(__rdm_click_timer);
+                    __rdm_click_timer = setTimeout(() => { window.__rdm_click_nav = false; }, 1200);
+                }
+            } catch (_) {}
+        }, { capture: true });
         let __resizeNudgeTimer = null;
         window.addEventListener('resize', () => { clearTimeout(__resizeNudgeTimer); __resizeNudgeTimer = setTimeout(nudgeMobileChrome, 200); });
         window.addEventListener('touchend', nudgeMobileChrome, { once: true, passive: true });
@@ -96,6 +177,15 @@ document.addEventListener('DOMContentLoaded', async function() {
                 }
             });
         }
+        // Mark click-driven navigations so router can distinguish from gesture/history
+        try {
+            const navLinks = document.querySelectorAll('#cabecera_menu1 a, #cabecera_menu2 a, #cabecera_siglas_img a');
+            const markClickNav = () => { window.__rdm_click_nav = true; };
+            navLinks.forEach(a => {
+                a.addEventListener('pointerdown', markClickNav, { passive: true });
+                a.addEventListener('click', markClickNav, { passive: true });
+            });
+        } catch (_) {}
     } else {
         console.error('Failed to load application data');
     }

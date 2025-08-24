@@ -12,6 +12,14 @@ html, body {
 	-webkit-font-smoothing: antialiased;
 }
 
+/* Global animation/transition kill switch used during BFCache restore or history swipe */
+body.no-anim, body.no-anim * {
+  -webkit-animation: none !important;
+  animation: none !important;
+  -webkit-transition: none !important;
+  transition: none !important;
+}
+
 *:link, *:visited, *:hover, *:active, *:focus {
    -webkit-transition:
      color .25s linear,
