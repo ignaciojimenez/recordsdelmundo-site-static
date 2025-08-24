@@ -212,6 +212,12 @@ html, body {
 		.cabecera_logo a:hover { text-decoration: none; color:transparent; background-color:transparent;}
 		
 		.active { text-decoration: none; color:#FFF; background-color:#000;}
+		/* Unified active state for menu links (desktop + mobile) */
+		.cabecera_menu1 a, .cabecera_menu2 a { border-radius: 0; transition: background-color 160ms ease, color 160ms ease; }
+		.cabecera_menu1 a.is-active,
+		.cabecera_menu1 a[aria-current="page"],
+		.cabecera_menu2 a.is-active,
+		.cabecera_menu2 a[aria-current="page"] { color:#FFF !important; background-color:#000 !important; }
 		.cabecera_menu1 {
 			height: 40px;
 			font-size:17px;

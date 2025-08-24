@@ -8,10 +8,38 @@
     const h = window.location.hash || '';
     return h.startsWith('#') ? h.slice(1) : h;
   }
+  function setActiveMenu(page) {
+    try {
+      const links = document.querySelectorAll('#cabecera_menu1 a, #cabecera_menu2 a');
+      links.forEach(a => {
+        a.classList.remove('is-active');
+        if (a.getAttribute('aria-current') === 'page') a.removeAttribute('aria-current');
+      });
+      if (!page) return;
+      let activeId = '';
+      if (page === 'info') {
+        activeId = 'menu-info';
+      } else if (page === 'tienda' || page.startsWith('tienda/producto/')) {
+        activeId = 'menu-tienda';
+      } else if (page.startsWith('grupos/')) {
+        const parts = page.split('/');
+        const slug = parts[1] || '';
+        if (slug) activeId = `menu-${slug}`;
+      }
+      if (activeId) {
+        const el = document.getElementById(activeId);
+        if (el) {
+          el.classList.add('is-active');
+          el.setAttribute('aria-current', 'page');
+        }
+      }
+    } catch (_) {}
+  }
 
   function routeFromHash(options = {}) {
     const instant = !!options.instant;
     const page = getHashPath();
+    setActiveMenu(page);
     if (!page) {
       // Home
       if (typeof window.mostrar === 'function') window.mostrar();

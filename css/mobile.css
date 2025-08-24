@@ -19,7 +19,7 @@ html, body {
 *, *::before, *::after { box-sizing: border-box; }
 
 /* On mobile, hover should not invert whole rows; keep text-only hover */
-a:hover { background-color: transparent !important; color: inherit !important; }
+/* Removed global a:hover override */
 
 .container { width: 100% !important; min-width: 0 !important; margin: 0 auto; padding: 0; }
 /* Mobile: stack main regions so we can place socials after content when needed */
@@ -108,11 +108,28 @@ body:not(.is-store) .contenido img { max-width: 100% !important; height: auto !i
 
 .cabecera_menu1 { text-align: center !important; margin-top: clamp(32px, 6vh, 72px) !important; font-size: 16px !important; transform: none !important; letter-spacing: 0.6px !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 10px !important; height: auto !important; margin-bottom: 14px !important; }
 .cabecera_menu1 a { display: inline-block !important; padding: 10px 6px !important; min-height: 44px !important; line-height: 1.5 !important; background: transparent !important; -webkit-tap-highlight-color: rgba(0,0,0,0.05); }
-.cabecera_menu1 a:hover { background-color: transparent !important; color: inherit !important; text-decoration: underline; }
+/* Hover unified with desktop (black bg, white text) via common.css */
 
 .cabecera_menu2 { text-align: center !important; margin-top: clamp(18px, 3.2vh, 36px) !important; font-size: 20px !important; transform: none !important; letter-spacing: 1.8px !important; height: auto !important; line-height: 1.5 !important; display: block !important; }
 .cabecera_menu2 a { margin: 0 10px !important; display: inline-block !important; padding: 10px 10px !important; min-height: 44px !important; -webkit-tap-highlight-color: rgba(0,0,0,0.05); }
-.cabecera_menu2 a:hover { background-color: transparent !important; color: inherit !important; text-decoration: underline; }
+/* Hover unified with desktop (black bg, white text) via common.css */
+
+/* Ensure hover/active override mobile base colors and transparent backgrounds */
+.cabecera_menu1 a:hover,
+.cabecera_menu1 a:focus-visible,
+.cabecera_menu1 a:active,
+.cabecera_menu1 a.is-active,
+.cabecera_menu1 a[aria-current="page"],
+.cabecera_menu2 a:hover,
+.cabecera_menu2 a:focus-visible,
+.cabecera_menu2 a:active,
+.cabecera_menu2 a.is-active,
+.cabecera_menu2 a[aria-current="page"] {
+  background-color: #000 !important;
+  color: #fff !important;
+  text-decoration: none !important;
+  background-clip: content-box !important; /* keep bg tight to text, not padding */
+}
 
 
 /* Subtle divider before INFO · TIENDA for visual hierarchy */
