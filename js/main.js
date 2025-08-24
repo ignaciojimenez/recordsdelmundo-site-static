@@ -56,7 +56,23 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Attempt to minimize browser chrome on mobile across a few lifecycle events
         setTimeout(nudgeMobileChrome, 300);
         window.addEventListener('orientationchange', () => setTimeout(nudgeMobileChrome, 250));
-        window.addEventListener('pageshow', () => setTimeout(nudgeMobileChrome, 150));
+        window.addEventListener('pageshow', (e) => {
+            // If coming from BFCache/back-forward restore, avoid re-animating UI
+            if (e && e.persisted) {
+                window.__rdm_restoring = true;
+                try { document.body.classList.add('no-anim'); } catch (_) {}
+                const clearFlag = () => {
+                    window.__rdm_restoring = false;
+                    try { document.body.classList.remove('no-anim'); } catch (_) {}
+                };
+                if (window.requestAnimationFrame) {
+                    requestAnimationFrame(() => setTimeout(clearFlag, 50));
+                } else {
+                    setTimeout(clearFlag, 200);
+                }
+            }
+            setTimeout(nudgeMobileChrome, 150);
+        });
         let __resizeNudgeTimer = null;
         window.addEventListener('resize', () => { clearTimeout(__resizeNudgeTimer); __resizeNudgeTimer = setTimeout(nudgeMobileChrome, 200); });
         window.addEventListener('touchend', nudgeMobileChrome, { once: true, passive: true });

@@ -199,3 +199,14 @@ body:not(.is-store) .contenido img { max-width: 100% !important; height: auto !i
 /* Product page on mobile: socials in-flow at bottom (not fixed) */
 .is-product .lateral_dch { position: static !important; bottom: auto !important; top: auto !important; left: auto !important; right: auto !important; width: 100% !important; margin: 16px 0 0 !important; text-align: center !important; }
 .is-product .centro { padding-bottom: 0 !important; }
+
+/* During BFCache restore, suppress transitions to avoid header flicker */
+body.no-anim *,
+body.no-anim #cabecera_siglas_img,
+body.no-anim #cabecera_siglas_img img,
+body.no-anim .contenido,
+body.no-anim .product,
+body.no-anim .product .product_header {
+  transition: none !important;
+  animation: none !important;
+}

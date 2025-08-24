@@ -39,6 +39,12 @@
   function routeFromHash(options = {}) {
     const instant = !!options.instant;
     const page = getHashPath();
+    // If the page was restored from bfcache/back-forward, avoid re-rendering;
+    // keep existing DOM and only refresh menu state to prevent flicker.
+    if (typeof window !== 'undefined' && window.__rdm_restoring) {
+      setActiveMenu(page);
+      return;
+    }
     setActiveMenu(page);
     if (!page) {
       // Home
