@@ -44,6 +44,9 @@ body:not(.is-store):not(.is-section) .lateral_dch { position: static !important;
 body:not(.is-store) .centro { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 72px) !important; }
 /* Home view: no need to reserve space for fixed bar since socials are in-flow */
 body:not(.is-store):not(.is-section) .centro { padding-bottom: 0 !important; }
+/* Info page: same behavior as home — socials in flow at bottom, no reserved padding */
+.is-info .lateral_dch { position: static !important; bottom: auto !important; top: auto !important; left: auto !important; right: auto !important; width: 100% !important; margin: 20px 0 24px !important; text-align: center !important; }
+.is-info .centro { padding-bottom: 0 !important; }
 /* Remove extra home top adjustments; rely on JS layout */
 /* no header overrides on mobile; keep desktop behavior */
 .is-store #cabecera_siglas_img { margin-top: 0 !important; }
@@ -86,7 +89,7 @@ body:not(.is-store) .contenido img { max-width: 100% !important; height: auto !i
 .is-section #cabecera_menu1, .is-section #cabecera_menu2 { display: none !important; margin-top: 0 !important; }
 .is-section #cabecera_siglas_img { display: block !important; margin-top: 0 !important; padding-top: calc(env(safe-area-inset-top, 0px) + 8px) !important; margin-bottom: 8px !important; cursor: pointer; max-height: 44px !important; text-align: center !important; }
 .is-section #cabecera_siglas_img img { max-height: 36px !important; }
-.is-section .contenido { margin-top: 8px !important; }
+.is-section .contenido { margin-top: 13px !important; }
 
 /* (Removed outgoing animation state to stabilize behavior) */
 

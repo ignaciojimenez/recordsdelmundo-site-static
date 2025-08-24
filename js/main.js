@@ -69,6 +69,7 @@ function mostrar() {
     // Home: remove section/band classes so large header is visible
     document.body.classList.remove('is-section');
     document.body.classList.remove('is-band');
+    document.body.classList.remove('is-info');
     // Ensure store-specific flow is turned off and social bar restored to original slot
     document.body.classList.remove('is-store');
     document.body.classList.remove('is-store-outgoing');
@@ -99,6 +100,10 @@ function esconder(page) {
     const isMobile = (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia('(max-width: 768px)').matches : false;
     // Always reset scroll to top on navigation to avoid position retention
     window.scrollTo(0, 0);
+    // Mobile: immediately mark as section to avoid header flicker while waiting for content load
+    if (isMobile && page.indexOf("tienda") === -1) {
+        document.body.classList.add('is-section');
+    }
     if (page.indexOf("tienda") === -1) {
         // Leaving store: ensure store-specific classes are removed
         document.body.classList.remove('is-store');
@@ -149,6 +154,12 @@ function loadPage(page) {
         setActiveMenu(page);
         // Non-home pages: mark as section for mobile header compaction
         document.body.classList.add('is-section');
+        // Mark info page for mobile-specific social behavior
+        if (page === 'info') {
+            document.body.classList.add('is-info');
+        } else {
+            document.body.classList.remove('is-info');
+        }
         // Band pages: mark as band to hide social icons on mobile
         if (page.startsWith('grupos/')) {
             document.body.classList.add('is-band');
@@ -222,16 +233,20 @@ function loadPage(page) {
         
         currentPage = page;
         
-        // Show content with fade in
-        const inDuration = isMobile ? (page === 'tienda' ? 250 : 200) : (page === 'tienda' ? 1100 : 900);
-        $('.contenido').fadeIn(inDuration);
+        // Show content (no animation on mobile to avoid flicker)
+        const inDuration = isMobile ? 0 : (page === 'tienda' ? 1100 : 900);
+        if (inDuration === 0) {
+            $('.contenido').show();
+        } else {
+            $('.contenido').fadeIn(inDuration);
+        }
         
         // Show back button only for product pages
         if (page.startsWith('tienda/producto/')) {
             $('.lateral_izq_inferior').fadeIn(isMobile ? 200 : 900);
         }
         
-    }, isMobile ? 200 : 1000);
+    }, isMobile ? 0 : 1000);
 }
 
 function loadProductPage(productKey) {
@@ -290,8 +305,13 @@ function hideContent() {
     const isMobile = (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia('(max-width: 768px)').matches : false;
     console.log('=== HIDE CONTENT DEBUG ===');
     console.log('Hiding content, current display:', document.getElementById('contenido').style.display);
-    $(".contenido").fadeOut(isMobile ? 180 : 1000);
-    $(".lateral_izq_inferior").fadeOut(isMobile ? 180 : 1000);
+    if (isMobile) {
+        $(".contenido").hide();
+        $(".lateral_izq_inferior").hide();
+    } else {
+        $(".contenido").fadeOut(1000);
+        $(".lateral_izq_inferior").fadeOut(1000);
+    }
     console.log('=== END HIDE CONTENT DEBUG ===');
 }
 
