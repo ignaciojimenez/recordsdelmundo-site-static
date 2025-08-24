@@ -26,6 +26,7 @@ async function loadData() {
         return false;
     }
 }
+// No dynamic placement here; store-only handling is in loadPage()
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async function() {
@@ -33,6 +34,26 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (dataLoaded) {
         // Set initial state - show home page
         mostrar();
+        // Make the RDM header clickable to go home on mobile when in store
+        const siglas = document.getElementById('cabecera_siglas_img');
+        if (siglas) {
+            siglas.addEventListener('click', function(e) {
+                const isMobile = (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia('(max-width: 768px)').matches : false;
+                if (isMobile && document.body.classList.contains('is-store')) {
+                    e.preventDefault();
+                    // Clean up any transient classes/inline styles and go home directly
+                    document.body.classList.remove('is-store-outgoing');
+                    const contenidoEl = document.getElementById('contenido');
+                    if (contenidoEl) {
+                        contenidoEl.style.transition = '';
+                        contenidoEl.style.marginTop = '';
+                    }
+                    mostrar();
+                    updateURL('');
+                    window.scrollTo(0, 0);
+                }
+            });
+        }
     } else {
         console.error('Failed to load application data');
     }
@@ -45,6 +66,19 @@ function mostrar() {
     document.getElementById("cabecera_menu1").style.marginTop = "23px";
     document.getElementById("cabecera_menu2").style.marginTop = "13px";
     document.getElementsByClassName("lateral_izq_inferior")[0].style.marginTop = "400px";
+    // Home: remove section/band classes so large header is visible
+    document.body.classList.remove('is-section');
+    document.body.classList.remove('is-band');
+    // Ensure store-specific flow is turned off and social bar restored to original slot
+    document.body.classList.remove('is-store');
+    document.body.classList.remove('is-store-outgoing');
+    document.body.classList.remove('is-shrinking');
+    const container = document.querySelector('.container');
+    const centro = document.querySelector('.centro');
+    const socialBar = document.querySelector('.lateral_dch');
+    if (container && centro && socialBar && container.contains(centro)) {
+        container.insertBefore(socialBar, centro);
+    }
     
     // Clear content and reset menu states
     clearActiveMenus();
@@ -54,34 +88,65 @@ function mostrar() {
     contenido.innerHTML = '';
     contenido.style.display = 'none';
     $('.lateral_izq_inferior').hide();
-    
+
     currentPage = '';
+
+    // Social bar: nothing else to do; fixed via CSS on home/short pages
+    window.scrollTo(0, 0);
 }
 
 function esconder(page) {
+    const isMobile = (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia('(max-width: 768px)').matches : false;
+    // Always reset scroll to top on navigation to avoid position retention
+    window.scrollTo(0, 0);
     if (page.indexOf("tienda") === -1) {
+        // Leaving store: ensure store-specific classes are removed
+        document.body.classList.remove('is-store');
+        document.body.classList.remove('is-shrinking');
+        // Reset any store-specific inline spacing
+        const centroEl = document.querySelector('.centro');
+        if (centroEl) centroEl.style.paddingTop = '';
         document.getElementById("cabecera_siglas_img").style.marginTop = "-200px";
         document.getElementById("cabecera_logo").style.marginTop = "0px";
         document.getElementById("cabecera_menu1").style.marginTop = "-10px";
         document.getElementById("cabecera_menu2").style.marginTop = "0px";
     } else if (page.indexOf("producto") !== -1) {
         // Product page - keep current header state
+        document.body.classList.remove('is-store');
+        document.body.classList.remove('is-shrinking');
+        const centroEl = document.querySelector('.centro');
+        if (centroEl) centroEl.style.paddingTop = '';
     } else {
-        document.getElementById("cabecera_siglas_img").style.marginTop = "0px";
-        document.getElementById("cabecera_logo").style.marginTop = "-570px";
-        document.getElementById("cabecera_menu1").style.marginTop = "-40px";
-        document.getElementById("cabecera_menu2").style.marginTop = "-70px";
+        // Tienda catalog page
+        // Desktop: apply inline margins to animate/hide big header elements
+        if (!isMobile) {
+            document.getElementById("cabecera_siglas_img").style.marginTop = "0px";
+            document.getElementById("cabecera_logo").style.marginTop = "-570px";
+            document.getElementById("cabecera_menu1").style.marginTop = "-40px";
+            document.getElementById("cabecera_menu2").style.marginTop = "-70px";
+        }
     }
     
     loadPage(page);
 }
 
 function loadPage(page) {
+    const isMobile = (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia('(max-width: 768px)').matches : false;
     hideContent();
+    // Ensure we are at the top when loading a new page
+    window.scrollTo(0, 0);
     
     setTimeout(() => {
         clearActiveMenus();
         setActiveMenu(page);
+        // Non-home pages: mark as section for mobile header compaction
+        document.body.classList.add('is-section');
+        // Band pages: mark as band to hide social icons on mobile
+        if (page.startsWith('grupos/')) {
+            document.body.classList.add('is-band');
+        } else {
+            document.body.classList.remove('is-band');
+        }
         
         const contenido = document.getElementById('contenido');
         let html = '';
@@ -105,29 +170,64 @@ function loadPage(page) {
         
         // Set different margins for different page types
         if (page === 'tienda' || page.startsWith('tienda/')) {
-            contenido.style.marginTop = '400px';
+            // Desktop needs large offset; mobile spacing is handled by CSS (.is-store .centro)
+            contenido.style.marginTop = isMobile ? '' : '400px';
+            // Clear any inline padding previously set
+            if (isMobile) {
+                const centroEl = document.querySelector('.centro');
+                if (centroEl) centroEl.style.paddingTop = '';
+            }
         } else {
             contenido.style.marginTop = '15px';
+        }
+        // Store-only on mobile: flow social bar after content, animate content spacing to match header shrink; else restore before center
+        const socialBar = document.querySelector('.lateral_dch');
+        if (isMobile && page === 'tienda') {
+            // Measure current header height BEFORE switching to .is-store (pre-shrink size)
+            const header = document.getElementById('cabecera_siglas_img');
+            const preShrinkHeight = header ? Math.ceil(header.getBoundingClientRect().height) : 176;
+            // Set initial spacing so content clears the current large header
+            contenido.style.marginTop = `${preShrinkHeight + 8}px`;
+
+            // Now switch to store layout and move social bar
+            document.body.classList.add('is-store');
+            if (socialBar && contenido) {
+                contenido.after(socialBar);
+            }
+
+            // Animate spacing down to the compact gap while the header shrinks via CSS
+            if (window.requestAnimationFrame) {
+                requestAnimationFrame(() => {
+                    contenido.style.marginTop = '8px';
+                });
+            } else {
+                setTimeout(() => { contenido.style.marginTop = '8px'; }, 0);
+            }
+        } else {
+            document.body.classList.remove('is-store');
+            const container = document.querySelector('.container');
+            const centro = document.querySelector('.centro');
+            if (socialBar && container && centro) {
+                container.insertBefore(socialBar, centro);
+            }
         }
         
         currentPage = page;
         
         // Show content with fade in
-        if (page === 'tienda') {
-            $('.contenido').fadeIn(1100);
-        } else {
-            $('.contenido').fadeIn(900);
-        }
+        const inDuration = isMobile ? (page === 'tienda' ? 250 : 200) : (page === 'tienda' ? 1100 : 900);
+        $('.contenido').fadeIn(inDuration);
         
         // Show back button only for product pages
         if (page.startsWith('tienda/producto/')) {
-            $('.lateral_izq_inferior').fadeIn(900);
+            $('.lateral_izq_inferior').fadeIn(isMobile ? 200 : 900);
         }
         
-    }, 1000);
+    }, isMobile ? 200 : 1000);
 }
 
 function loadProductPage(productKey) {
+    const isMobile = (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia('(max-width: 768px)').matches : false;
     // Stop any ongoing animations first
     $('.contenido').stop(true, true);
     $('.imagenDisco').stop(true, true);
@@ -136,6 +236,7 @@ function loadProductPage(productKey) {
     // Hide content immediately without animation
     $('.contenido').hide();
     $('.lateral_izq_inferior').hide();
+    window.scrollTo(0, 0);
     
     // Set tienda header layout for product pages
     document.getElementById("cabecera_siglas_img").style.marginTop = "0px";
@@ -147,6 +248,16 @@ function loadProductPage(productKey) {
     setTimeout(() => {
         clearActiveMenus();
         setActiveMenu('tienda');
+        // Product detail is a section
+        document.body.classList.add('is-section');
+        // Make sure store flow is disabled and social bar is in its original place
+        document.body.classList.remove('is-store');
+        const container = document.querySelector('.container');
+        const centro = document.querySelector('.centro');
+        const socialBar = document.querySelector('.lateral_dch');
+        if (container && centro && socialBar && container.contains(centro)) {
+            container.insertBefore(socialBar, centro);
+        }
         
         const contenido = document.getElementById('contenido');
         const productHtml = renderProductPage(productKey);
@@ -164,14 +275,15 @@ function loadProductPage(productKey) {
         currentPage = `tienda/producto/${productKey}`;
         
         // Note: Removed call to undefined bindPendingButtonHandlers() (was causing ReferenceError)
-    }, 300);
+    }, isMobile ? 150 : 300);
 }
 
 function hideContent() {
+    const isMobile = (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia('(max-width: 768px)').matches : false;
     console.log('=== HIDE CONTENT DEBUG ===');
     console.log('Hiding content, current display:', document.getElementById('contenido').style.display);
-    $(".contenido").fadeOut(1000);
-    $(".lateral_izq_inferior").fadeOut(1000);
+    $(".contenido").fadeOut(isMobile ? 180 : 1000);
+    $(".lateral_izq_inferior").fadeOut(isMobile ? 180 : 1000);
     console.log('=== END HIDE CONTENT DEBUG ===');
 }
 

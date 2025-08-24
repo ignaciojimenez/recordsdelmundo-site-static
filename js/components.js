@@ -4,15 +4,19 @@ function renderGroupPage(pageKey) {
     const page = pageContent[pageKey];
     if (!page) return '';
     
+    // Image first
     let html = `<img class="imagen" src="${page.image}" />`;
     if (page.imageCredit) {
         html += `<span class="piedefoto">${page.imageCredit}</span>`;
     }
     html += '<br>';
-    
+
+    // Main content next
+    html += page.content;
+
+    // Place files/social at the very bottom
     if (page.social || page.files) {
         html += '<table class="tablagrupo"><tr>';
-        
         if (page.files) {
             html += '<td class="datos">';
             page.files.forEach((file, index) => {
@@ -21,7 +25,6 @@ function renderGroupPage(pageKey) {
             });
             html += '</td>';
         }
-        
         if (page.social) {
             html += '<td class="social">';
             if (page.social.facebook) html += `<a class="iconos facebook" href="${page.social.facebook}"></a>`;
@@ -29,11 +32,8 @@ function renderGroupPage(pageKey) {
             if (page.social.bandcamp) html += `<a class="iconos bandcamp" href="${page.social.bandcamp}"></a>`;
             html += '</td>';
         }
-        
         html += '</tr></table>';
     }
-    
-    html += page.content;
     return html;
 }
 
@@ -145,7 +145,11 @@ function renderProductPage(productKey) {
     // Right div - Bandcamp player or nobandcamp info
     html += `<div class='playerDisco' style='text-align:left;font-family:Arial; font-size:12px; float:right; width:300px;'>`;
     if (product.bcalbum && product.bcalbum !== "") {
-        html += `<iframe id="bc" width="300" height="390" style="position: relative; width: 300px; height: 390px;" src="https://bandcamp.com/EmbeddedPlayer/v=2/album=${product.bcalbum}/size=grande2/bgcol=FFFFFF/linkcol=333333/debug=true/" allowtransparency="true" frameborder="0"></iframe>`;
+        // Show full playlist on mobile and desktop (mobile uses taller height)
+        const isMobile = (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia('(max-width: 768px)').matches : false;
+        const bcSrc = `https://bandcamp.com/EmbeddedPlayer/v=2/album=${product.bcalbum}/size=grande2/bgcol=FFFFFF/linkcol=333333/`;
+        const bcHeight = isMobile ? 400 : 390;
+        html += `<iframe id="bc" style="position:relative; border:0; width:100%; height:${bcHeight}px;" src="${bcSrc}" allowtransparency="true" frameborder="0"></iframe>`;
     } else if (product.estado === "nobandcamp") {
         html += `<strong>Formato:</strong> ${product.formato}`;
         html += `<br><strong>Lanzamiento:</strong> ${product.lanzamiento}`;

@@ -1,0 +1,129 @@
+/* Mobile-only overrides (linked with media="(max-width: 768px)") */
+
+/* Base resets for mobile: keep desktop's white background */
+html, body { background: #ffffff !important; overflow-x: hidden; }
+/* Include padding in width calculations on mobile to prevent overflow */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* On mobile, hover should not invert whole rows; keep text-only hover */
+a:hover { background-color: transparent !important; color: inherit !important; }
+
+.container { width: 100% !important; min-width: 0 !important; margin: 0 auto; padding: 0; }
+
+/* Center column full width (content itself left-aligned; specific elements center themselves) */
+.centro { float: none; width: 100% !important; min-width: 0 !important; margin: 0 auto; text-align: left; }
+.is-section .contenido { text-align: left; }
+
+/* Hide left column label; use only the back button when shown by JS on product pages */
+.lateral_izq { display: none !important; }
+
+/* Social icons -> bottom centered */
+.lateral_dch { position: fixed !important; bottom: calc(env(safe-area-inset-bottom, 0px) + 10px) !important; top: auto !important; left: 0 !important; right: 0 !important; transform: none !important; width: 100% !important; min-width: 0 !important; height: auto !important; float: none !important; z-index: 50; text-align: center !important; }
+.lateral_dch .content { width: auto !important; margin: 0 auto !important; }
+.lateral_dch a { margin: 0 6px !important; }
+.is-band .lateral_dch { display: none !important; }
+.is-store .lateral_dch { position: static !important; bottom: auto !important; top: auto !important; left: auto !important; right: auto !important; width: 100% !important; margin: 16px 0 0 !important; text-align: center !important; }
+/* When NOT in store/long pages, add breathing room so fixed bar doesn't crowd content */
+body:not(.is-store) .centro { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 64px) !important; }
+/* Remove extra home top adjustments; rely on JS layout */
+/* no header overrides on mobile; keep desktop behavior */
+.is-store #cabecera_siglas_img { margin-top: 0 !important; }
+.is-store #cabecera_logo { margin-top: -570px !important; }
+.is-store #cabecera_menu1 { margin-top: -40px !important; }
+.is-store #cabecera_menu2 { margin-top: -70px !important; }
+.facebook, .twitter, .youtube, .bandcamp, .instagram {
+  width: 26px !important;
+  height: 26px !important;
+  background-size: contain !important;
+}
+
+/* no header/menu overrides on mobile; rely on desktop styles */
+
+/* Content container: plain white like desktop, no card styles */
+.contenido { margin-top: 12px; background: transparent !important; border-radius: 0 !important; box-shadow: none !important; padding: 0 !important; }
+/* Add minimal horizontal padding for non-store pages at the column level so header and content align */
+body:not(.is-store) .centro { padding: 0 12px !important; box-sizing: border-box; }
+/* Content should not add extra padding to avoid double inset */
+body:not(.is-store) .contenido { padding: 0 !important; box-sizing: border-box; max-width: 100%; }
+/* Ensure images inside content never overflow container */
+body:not(.is-store) .contenido img { max-width: 100% !important; height: auto !important; }
+/* Store-only: show only RDM header (hide big logo and menus) */
+.is-store #cabecera_logo { display: none !important; margin-top: 0 !important; }
+.is-store #cabecera_menu1, .is-store #cabecera_menu2 { display: none !important; margin-top: 0 !important; }
+/* Make RDM header animate smoothly on mobile */
+#cabecera_siglas_img { overflow: hidden; max-height: 180px; transition: max-height 250ms ease, padding-top 250ms ease; text-align: center; margin-bottom: 8px; }
+#cabecera_siglas_img a { display: block; }
+/* Animate image height directly for a true shrink instead of cropping */
+#cabecera_siglas_img img { display: block; height: auto; width: auto; max-width: 100%; margin: 0 auto; transform-origin: top center; max-height: 160px; transition: max-height 250ms ease; }
+/* Ensure big home logo scales within mobile width */
+#cabecera_logo img { max-width: 100%; height: auto; }
+/* Visible, compact, safe-area-aware in store */
+.is-store #cabecera_siglas_img { display: block !important; margin-top: 0 !important; padding-top: calc(env(safe-area-inset-top, 0px) + 8px) !important; margin-bottom: 8px !important; cursor: pointer; max-height: 44px !important; text-align: center !important; }
+.is-store #cabecera_siglas_img img { max-height: 36px !important; display: inline-block; }
+
+/* (Removed outgoing animation state to stabilize behavior) */
+
+/* Minimal gap below the small header on store mobile, with smooth transition */
+.is-store .contenido { margin-top: 8px; transition: margin-top 250ms ease; }
+
+/* (Removed legacy is-shrinking spacing; JS animates margin directly) */
+
+/* Home/menu layout on mobile: stack and center items, smaller sizes */
+.cabecera_logo { margin-top: 32px !important; text-align: center !important; }
+.cabecera_logo img { max-width: 78% !important; height: auto !important; margin: 0 auto !important; display: block !important; }
+
+.cabecera_menu1 { text-align: center !important; margin-top: 48px !important; font-size: 16px !important; transform: none !important; letter-spacing: 1px !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 10px !important; height: auto !important; margin-bottom: 12px !important; }
+.cabecera_menu1 a { display: inline-block !important; padding: 2px 0 !important; line-height: 1.5 !important; background: transparent !important; }
+.cabecera_menu1 a:hover { background-color: transparent !important; color: inherit !important; text-decoration: underline; }
+
+.cabecera_menu2 { text-align: center !important; margin-top: 26px !important; font-size: 20px !important; transform: none !important; letter-spacing: 2px !important; height: auto !important; line-height: 1.5 !important; display: block !important; }
+.cabecera_menu2 a { margin: 0 8px !important; display: inline-block !important; }
+.cabecera_menu2 a:hover { background-color: transparent !important; color: inherit !important; text-decoration: underline; }
+
+/* Info & group tables: stack and center */
+.tablagrupo, .tablatour { min-width: 0 !important; width: 100% !important; }
+.tablagrupo tr, .tablagrupo td { display: block !important; width: 100% !important; }
+.tablagrupo .datos { text-align: center !important; }
+.tablagrupo .social { min-width: 0 !important; text-align: center !important; margin-top: 8px !important; }
+
+/* Typography */
+.contenido { font-size: 17px; line-height: 1.55; }
+.info p { margin: 12px 0 !important; }
+
+/* Tienda (catalog) */
+.tienda { width: 100% !important; margin-top: 6px !important; }
+.product { width: 100% !important; height: auto !important; float: none !important; display: block !important; margin: 0 0 28px 0 !important; padding-bottom: 0 !important; border: none !important; }
+.product .product_header { position: static !important; opacity: 1 !important; filter: none !important; margin: 0 0 10px 0 !important; padding: 0 2px; text-shadow: none !important; color: #000; text-align: center; }
+.product_header h2 { font-size: 15px !important; letter-spacing: 1px !important; }
+.product_header h3 { font-size: 13px !important; color: #444; }
+.product_header .dash { display: none !important; }
+.product_thumb { margin: 0 !important; }
+.product_thumb img { width: 86% !important; max-width: 360px !important; margin: 0 auto !important; display: block !important; aspect-ratio: 1/1; object-fit: cover; border-radius: 0 !important; }
+.product, .product .product_header { transition: none !important; }
+.product a:hover { background-color: transparent !important; color: inherit !important; box-shadow: none !important; }
+.product a:hover .product_thumb { opacity: 1 !important; }
+.product a:hover .product_header, .product a:hover .product_header h2, .product a:hover .product_header h3 { text-decoration: none !important; }
+/* Reset legacy store layout offset if present */
+#products { margin-left: 0 !important; }
+
+/* Product page stack */
+.imagenDisco, .playerDisco { width: 100% !important; float: none !important; margin: 0 0 12px 0 !important; display: block !important; }
+.imagenDisco img { width: 100% !important; height: auto; }
+
+/* Bandcamp iframe: show playlist on mobile with larger player */
+#bc { width: 100% !important; height: 400px !important; border: 0; }
+
+/* PayPal / buttons: unify sizing */
+.paypal-form-container, .descarga { margin-top: 10px !important; }
+.paypal-comprar-btn, .descarga { display: inline-flex !important; align-items: center; justify-content: center; min-height: 44px; padding: 10px 14px !important; font-size: 14px !important; border-radius: 6px !important; }
+
+/* Back button (for product pages) */
+.lateral_izq_inferior { position: fixed !important; bottom: 70px !important; left: 10px !important; width: auto !important; height: auto !important; margin: 0 !important; z-index: 60; }
+.back { width: 30px !important; height: 30px !important; background-size: contain !important; }
+
+/* Images inside content */
+.contenido .imagen { width: 100% !important; height: auto; border-radius: 6px; }
+.piedefoto { position: static !important; display: block; margin-top: 6px !important; color: #777 !important; }
+
+/* Ensure JS-set large margins don't push content too far on mobile */
+.contenido { margin-top: 12px !important; }
