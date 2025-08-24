@@ -9,7 +9,6 @@
     "lanzamiento": "Enero 2009",
     "precio": "10 €",
     "btnppal": "XXXXXX",
-    "paypal_item_id": "ellejanooyente",
     "description": "ATENCIÓN TSUNAMI - EL LEJANO OYENTE - CD"
   },
   "elcuerpohumano": {
@@ -22,7 +21,6 @@
     "lanzamiento": "Marzo 2013",
     "precio": "10 €",
     "btnppal": "JWBCF2Z2THEAL",
-    "paypal_item_id": "elcuerpohumano",
     "description": "INCENDIOS - EL CUERPO HUMANO - Vinilo 12'' + CD"
   },
   "quelecortenlacabeza": {
@@ -35,7 +33,6 @@
     "lanzamiento": "6 de Mayo 2014",
     "precio": "14 €",
     "btnppal": "H822EQF8KJFZY",
-    "paypal_item_id": "quelecortenlacabeza",
     "description": "ATENCIÓN TSUNAMI - QUE LE CORTEN LA CABEZA - Vinilo 12'' + CD"
   },
   "pensamientodepaz": {
@@ -44,11 +41,11 @@
     "tipo": "disco",
     "estado": "ok",
     "bcalbum": "2016021601",
+    "img": "pensamientodepaz",
     "formato": "Vinilo 10 '' + CD",
     "lanzamiento": "1 de Abril 2015",
     "precio": "12 €",
     "btnppal": "T3E8MJV8Z4WXL",
-    "paypal_item_id": "pensamientodepaz",
     "description": "PARACAÍDAS - PENSAMIENTO DE PAZ DURANTE UN ATAQUE AÉREO - Vinilo 10'' + CD"
   },
   "sillasvoladoras": {
@@ -61,7 +58,6 @@
     "lanzamiento": "28 de octubre 2015",
     "precio": "14 €",
     "btnppal": "Y7UF6SU9FWJ4Y",
-    "paypal_item_id": "sillasvoladoras",
     "description": "INCENDIOS - LAS SILLAS VOLADORAS - Vinilo 12'' + CD"
   },
   "silencioretaguardia": {
@@ -74,7 +70,6 @@
     "lanzamiento": "4 de noviembre 2016",
     "precio": "14 €",
     "btnppal": "L593YRTBFUQNQ",
-    "paypal_item_id": "silencioretaguardia",
     "description": "ATENCIÓN TSUNAMI - SILENCIO EN LA RETAGUARDIA - Vinilo 12''"
   },
   "realejo": {
@@ -87,7 +82,6 @@
     "lanzamiento": "17 de noviembre 2017",
     "precio": "16.95 €",
     "btnppal": "HZ8YS7QQPTD2A",
-    "paypal_item_id": "realejo",
     "description": "AUTUMN COMETS - REALEJO - Vinilo 12''"
   },
   "vltra": {
@@ -100,7 +94,6 @@
     "lanzamiento": "29 de marzo 2019",
     "precio": "15 €",
     "btnppal": "B3CXXUNP5ZYM2",
-    "paypal_item_id": "vltra",
     "description": "ATENCIÓN TSUNAMI - VLTRA - Vinilo 12''"
   },
   "pensamientomagico": {
@@ -114,7 +107,6 @@
     "precio": "18 €",
     "btnppal": "",
     "bcurl": "https://disciplinaatlantico.bandcamp.com/album/pensamiento-m-gico",
-    "paypal_item_id": "pensamientomagico",
     "description": "DISCIPLINA ATLÁNTICO - PENSAMIENTO MÁGICO - Vinilo 12''"
   },
   "metavolante": {
@@ -127,7 +119,18 @@
     "lanzamiento": "16 de abril 2021",
     "precio": "15 €",
     "btnppal": "EVZKN57KTS6NW",
-    "paypal_item_id": "metavolante",
     "description": "META VOLANTE - Vinilo 12''"
+  },
+  "core": {
+    "nombre": "core",
+    "grupo": "atenctiontsunami",
+    "tipo": "disco",
+    "estado": "ok",
+    "bcalbum": "1042866268",
+    "formato": "Vinilo 12 ''",
+    "lanzamiento": "1 de debrero 2024",
+    "precio": "15 €",
+    "btnppal": "DMQQ4DCAWLDJ8",
+    "description": "Atención Tsunami - Core - Vinilo 12''"
   }
 }
