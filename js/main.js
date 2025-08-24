@@ -27,6 +27,25 @@ async function loadData() {
     }
 }
 // No dynamic placement here; store-only handling is in loadPage()
+// Best-effort helper: gently scroll on mobile to encourage URL/status bar to minimize
+function nudgeMobileChrome() {
+    const isMobile = (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia('(max-width: 768px)').matches : false;
+    if (!isMobile) return;
+    // Avoid interfering while typing
+    const ae = (typeof document !== 'undefined') ? document.activeElement : null;
+    if (ae && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA' || ae.isContentEditable)) return;
+    if (typeof window.requestAnimationFrame === 'function') {
+        requestAnimationFrame(() => {
+            if (window.pageYOffset < 2) {
+                try { window.scrollTo(0, 1); } catch (e) {}
+            }
+        });
+    } else {
+        if (window.pageYOffset < 2) {
+            try { window.scrollTo(0, 1); } catch (e) {}
+        }
+    }
+}
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async function() {
@@ -34,6 +53,13 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (dataLoaded) {
         // Set initial state - show home page
         mostrar();
+        // Attempt to minimize browser chrome on mobile across a few lifecycle events
+        setTimeout(nudgeMobileChrome, 300);
+        window.addEventListener('orientationchange', () => setTimeout(nudgeMobileChrome, 250));
+        window.addEventListener('pageshow', () => setTimeout(nudgeMobileChrome, 150));
+        let __resizeNudgeTimer = null;
+        window.addEventListener('resize', () => { clearTimeout(__resizeNudgeTimer); __resizeNudgeTimer = setTimeout(nudgeMobileChrome, 200); });
+        window.addEventListener('touchend', nudgeMobileChrome, { once: true, passive: true });
         // Make the RDM header clickable to go home on mobile when in store or content pages
         const siglas = document.getElementById('cabecera_siglas_img');
         if (siglas) {

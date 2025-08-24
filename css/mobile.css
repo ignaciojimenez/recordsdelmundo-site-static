@@ -8,6 +8,10 @@ html, body {
   height: auto !important;
   min-height: calc(100vh + 1px);
   min-height: calc(100dvh + 1px);
+  /* Small viewport height fallback for devices that expose svh */
+  min-height: calc(100svh + 1px);
+  /* Tiny bottom padding to reliably allow a 1px scroll on very short pages */
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), 2px);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
