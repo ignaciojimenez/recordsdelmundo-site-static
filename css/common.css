@@ -96,16 +96,17 @@ html, body {
 		background-color:transparent;
 	}
 	.piedefoto{
-		position: absolute;
-		margin-top: -22px;
-		margin-left: 2px;
-		text-align: right;
-		font-size: 15px;
-		color: rgba(245, 245, 245, 0.89);
+		position: static;
+		display: block;
+		margin-top: 6px;
+		margin-left: 0;
+		text-align: left;
+		font-size: 14px;
+		color: #777;
 	}
-	.piedefoto a { text-decoration: none; color:rgba(245, 245, 245, 0.89);}
-	.piedefoto a:visited { text-decoration: none;  }
-	.piedefoto a:hover { text-decoration: none; color:#FFF;background-color:transparent;}
+	.piedefoto a { text-decoration: none; color:#777; border-bottom: 1px solid #bbb; }
+	.piedefoto a:visited { text-decoration: none; color:#777; }
+	.piedefoto a:hover { text-decoration: none; color:#000; background-color:transparent; border-bottom-color: #000; }
 
 /****************************************************
 *		ESTILO CONTENDOR CUERPO						*
@@ -218,6 +219,9 @@ html, body {
 		.cabecera_menu1 a[aria-current="page"],
 		.cabecera_menu2 a.is-active,
 		.cabecera_menu2 a[aria-current="page"] { color:#FFF !important; background-color:#000 !important; }
+		/* Explicit desktop hover for menu links (don't rely on global a:hover) */
+		.cabecera_menu1 a:hover,
+		.cabecera_menu2 a:hover { color:#FFF !important; background-color:#000 !important; }
 		.cabecera_menu1 {
 			height: 40px;
 			font-size:17px;
@@ -258,6 +262,24 @@ html, body {
 			text-align:justify;
 			margin-top:15px;
 			line-height:1.3em;
+		}
+
+		/* Unified text-link styles inside content (emails, press notes, riders) */
+		/* Exclude button-like anchors */
+		.contenido p a:not(.descarga):not(.paypal-comprar-btn),
+		.contenido .datos a:not(.descarga):not(.paypal-comprar-btn) {
+			text-decoration: none;
+			color: #000;
+			border-bottom: 1px solid #bbb;
+		}
+		.contenido p a:not(.descarga):not(.paypal-comprar-btn):hover,
+		.contenido p a:not(.descarga):not(.paypal-comprar-btn):focus-visible,
+		.contenido .datos a:not(.descarga):not(.paypal-comprar-btn):hover,
+		.contenido .datos a:not(.descarga):not(.paypal-comprar-btn):focus-visible {
+			color: #000;
+			background-color: transparent;
+			border-bottom-color: #000;
+			outline: none;
 		}
 		.contenido p{
 			margin:0;
