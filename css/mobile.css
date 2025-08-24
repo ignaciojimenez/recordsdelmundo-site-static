@@ -18,6 +18,11 @@ html, body {
 a:hover { background-color: transparent !important; color: inherit !important; }
 
 .container { width: 100% !important; min-width: 0 !important; margin: 0 auto; padding: 0; }
+/* Mobile: stack main regions so we can place socials after content when needed */
+.container { display: flex; flex-direction: column; }
+/* Order: center content before socials in the flow */
+.centro { order: 2; }
+.lateral_dch { order: 3; }
 
 /* Center column full width (content itself left-aligned; specific elements center themselves) */
 .centro { float: none; width: 100% !important; min-width: 0 !important; margin: 0 auto; text-align: left; }
@@ -33,8 +38,12 @@ a:hover { background-color: transparent !important; color: inherit !important; }
 .lateral_dch a:hover, .lateral_dch a:focus-visible { border-color: #bdbdbd !important; box-shadow: 0 2px 4px rgba(0,0,0,0.08) !important; outline: none !important; }
 .is-band .lateral_dch { display: none !important; }
 .is-store .lateral_dch { position: static !important; bottom: auto !important; top: auto !important; left: auto !important; right: auto !important; width: 100% !important; margin: 16px 0 0 !important; text-align: center !important; }
+/* Home view: socials should be at the document bottom (no fixed overlay) */
+body:not(.is-store):not(.is-section) .lateral_dch { position: static !important; bottom: auto !important; top: auto !important; left: auto !important; right: auto !important; width: 100% !important; margin: 20px 0 24px !important; text-align: center !important; }
 /* When NOT in store/long pages, add breathing room so fixed bar doesn't crowd content */
-body:not(.is-store) .centro { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 64px) !important; }
+body:not(.is-store) .centro { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 72px) !important; }
+/* Home view: no need to reserve space for fixed bar since socials are in-flow */
+body:not(.is-store):not(.is-section) .centro { padding-bottom: 0 !important; }
 /* Remove extra home top adjustments; rely on JS layout */
 /* no header overrides on mobile; keep desktop behavior */
 .is-store #cabecera_siglas_img { margin-top: 0 !important; }
@@ -97,6 +106,7 @@ body:not(.is-store) .contenido img { max-width: 100% !important; height: auto !i
 .cabecera_menu2 { text-align: center !important; margin-top: clamp(18px, 3.2vh, 36px) !important; font-size: 20px !important; transform: none !important; letter-spacing: 1.8px !important; height: auto !important; line-height: 1.5 !important; display: block !important; }
 .cabecera_menu2 a { margin: 0 10px !important; display: inline-block !important; padding: 10px 10px !important; min-height: 44px !important; -webkit-tap-highlight-color: rgba(0,0,0,0.05); }
 .cabecera_menu2 a:hover { background-color: transparent !important; color: inherit !important; text-decoration: underline; }
+
 
 /* Subtle divider before INFO · TIENDA for visual hierarchy */
 .cabecera_menu2::before {
