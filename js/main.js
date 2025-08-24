@@ -51,8 +51,8 @@ function nudgeMobileChrome() {
 document.addEventListener('DOMContentLoaded', async function() {
     const dataLoaded = await loadData();
     if (dataLoaded) {
-        // Set initial state - show home page
-        mostrar();
+        // Signal router to attach and route once data is ready
+        window.dispatchEvent(new CustomEvent('rdm:ready'));
         // Attempt to minimize browser chrome on mobile across a few lifecycle events
         setTimeout(nudgeMobileChrome, 300);
         window.addEventListener('orientationchange', () => setTimeout(nudgeMobileChrome, 250));
@@ -380,26 +380,6 @@ function setActiveMenu(page) {
     }
 }
 
-// Handle browser back/forward buttons
-window.addEventListener('popstate', function(event) {
-    if (event.state && event.state.page) {
-        if (event.state.page === '') {
-            mostrar();
-        } else {
-            esconder(event.state.page);
-        }
-    }
-});
-
-// Update URL without page reload (for better UX, though not required for static hosting)
-function updateURL(page) {
-    const url = page === '' ? '/' : `/${page}`;
-    history.pushState({page: page}, '', url);
-}
-
-// Back button navigation - goes to tienda, not home
-function backToTienda() {
-    esconder('tienda');
-}
+// updateURL() and backToTienda() are provided by router.js
 
 // Removed legacy printmail() helper; content uses direct mailto links now

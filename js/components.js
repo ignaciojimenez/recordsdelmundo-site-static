@@ -120,7 +120,7 @@ function renderTiendaPage() {
         const thumbKey = product.nombre || key;
         html += `
             <div class="product">
-                <a href="#" onclick="loadProductPage('${key}')" title="Ver ${title}">
+                <a href="#tienda/producto/${key}" title="Ver ${title}">
                     <div class="product_header">
                         <h2>${title}</h2>
                         <span class="dash"></span>

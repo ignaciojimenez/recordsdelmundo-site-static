@@ -22,6 +22,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" defer crossorigin="anonymous"></script>
     <script src="js/components.js" defer></script>
     <script src="js/main.js" defer></script>
+    <script src="js/router.js" defer></script>
 </head>
 <body>
     <div class="container">
@@ -29,7 +30,7 @@
             LATERAL IZQ
         </div>
         <div class="lateral_izq_inferior">
-            <a href="#" onclick="backToTienda()" class="back" title="Back link"></a>
+            <a href="#tienda" class="back" title="Back link"></a>
         </div>
 
         <div class="lateral_dch">
@@ -43,20 +44,20 @@
         <div class="centro">
             <!-- Header/Menu -->
             <div class="cabecera_siglas_img transicion_cabeceras" id="cabecera_siglas_img">
-                <a href="#" onclick="mostrar()"><img src="images/cabecera.png" /></a>
+                <a href="#"><img src="images/cabecera.png" /></a>
             </div>
             <div class="cabecera_logo transicion_cabeceras" id="cabecera_logo">
-                <a href="#" onclick="mostrar()"><img src="images/fosbury.png"/></a>
+                <a href="#"><img src="images/fosbury.png"/></a>
             </div>
             <div class="cabecera_menu1 transicion_cabeceras" id="cabecera_menu1">
-                <a href="#" onclick="esconder('grupos/inc');" id="menu-inc">INCENDIOS</a>
-                <a href="#" onclick="esconder('grupos/at');" id="menu-at">ATENCI&Oacute;N TSUNAMI</a>
-                <a href="#" onclick="esconder('grupos/par');" id="menu-par">PARACA&Iacute;DAS</a>
+                <a href="#grupos/inc" id="menu-inc">INCENDIOS</a>
+                <a href="#grupos/at" id="menu-at">ATENCI&Oacute;N TSUNAMI</a>
+                <a href="#grupos/par" id="menu-par">PARACA&Iacute;DAS</a>
             </div>
             <div class="cabecera_menu2 transicion_cabeceras" id="cabecera_menu2">
-                <a href="#" onclick="esconder('info');" id="menu-info">INFO</a>
+                <a href="#info" id="menu-info">INFO</a>
                 &nbsp;&middot;&nbsp;
-                <a href="#" onclick="esconder('tienda');" id="menu-tienda">TIENDA</a>
+                <a href="#tienda" id="menu-tienda">TIENDA</a>
             </div>
 
             <div class="contenido" id="contenido">
