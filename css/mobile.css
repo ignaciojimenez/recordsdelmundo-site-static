@@ -1,7 +1,14 @@
 /* Mobile-only overrides (linked with media="(max-width: 768px)") */
 
 /* Base resets for mobile: keep desktop's white background */
-html, body { background: #ffffff !important; overflow-x: hidden; }
+html, body {
+  background: #ffffff !important;
+  overflow-x: hidden;
+  /* Allow a tiny scroll so mobile browsers can collapse the URL bar */
+  height: auto !important;
+  min-height: calc(100vh + 1px);
+  min-height: calc(100dvh + 1px);
+}
 /* Include padding in width calculations on mobile to prevent overflow */
 *, *::before, *::after { box-sizing: border-box; }
 
