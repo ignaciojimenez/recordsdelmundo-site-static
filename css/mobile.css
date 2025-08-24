@@ -52,7 +52,8 @@ body:not(.is-store) .centro { padding-bottom: calc(env(safe-area-inset-bottom, 0
 /* Content container: plain white like desktop, no card styles */
 .contenido { margin-top: 12px; background: transparent !important; border-radius: 0 !important; box-shadow: none !important; padding: 0 !important; }
 /* Add minimal horizontal padding for non-store pages at the column level so header and content align */
-body:not(.is-store) .centro { padding: 0 12px !important; box-sizing: border-box; }
+/* Important: do not override bottom padding reserved for the fixed social bar */
+body:not(.is-store) .centro { padding-left: 12px !important; padding-right: 12px !important; box-sizing: border-box; }
 /* Content should not add extra padding to avoid double inset */
 body:not(.is-store) .contenido { padding: 0 !important; box-sizing: border-box; max-width: 100%; }
 /* Ensure images inside content never overflow container */
