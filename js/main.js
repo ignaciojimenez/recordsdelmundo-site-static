@@ -5,7 +5,7 @@ let productData = {};
 let pageContent = {};
 
 // Debug logging helper (toggle with window.__rdm_debug = true/false)
-try { if (typeof window !== 'undefined' && typeof window.__rdm_debug === 'undefined') window.__rdm_debug = true; } catch (_) {}
+try { if (typeof window !== 'undefined' && typeof window.__rdm_debug === 'undefined') window.__rdm_debug = false; } catch (_) {}
 function rdmLog() {
     try { if (typeof window !== 'undefined' && window.__rdm_debug) console.log('[RDM]', ...arguments); } catch (_) {}
 }
@@ -66,35 +66,35 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Attempt to minimize browser chrome on mobile across a few lifecycle events
         setTimeout(nudgeMobileChrome, 300);
         window.addEventListener('orientationchange', () => setTimeout(nudgeMobileChrome, 250));
-        // Detect horizontal swipe gestures (trackpads/mice). We set a short-lived flag
-        // that we use to gate instant navigation and BFCache no-anim behavior.
-        const markSwipe = (ev) => {
-            try {
-                const dx = Math.abs(ev.deltaX || 0);
-                const dy = Math.abs(ev.deltaY || 0);
-                // Heuristic: large horizontal movement with little vertical
-                if (dx > 20 && dy < 10) {
-                    rdmLog('swipe-detected', { dx, dy });
-                    window.__rdm_swipe_nav = true;
-                    clearTimeout(window.__rdm_swipe_nav_timer);
-                    window.__rdm_swipe_nav_timer = setTimeout(() => { window.__rdm_swipe_nav = false; }, 1000);
-                }
-                else if (dx > 6) {
-                    rdmLog('wheel-horizontal', { dx, dy, recognized: false });
-                }
-                window.__rdm_last_input = { type: 'wheel', dx, dy, t: Date.now() };
-            } catch (_) {}
-        };
-        window.addEventListener('wheel', markSwipe, { passive: true });
-        // Some browsers still emit legacy mousewheel
-        window.addEventListener('mousewheel', (ev) => {
-            try {
-                const dx = Math.abs(ev.wheelDeltaX ? -ev.wheelDeltaX : (ev.deltaX || 0));
-                const dy = Math.abs(ev.wheelDeltaY ? -ev.wheelDeltaY : (ev.deltaY || 0));
-                rdmLog('mousewheel', { dx, dy });
-                window.__rdm_last_input = { type: 'wheel', dx, dy, t: Date.now() };
-            } catch (_) {}
-        }, { passive: true });
+        // Debug-only: detect horizontal swipe gestures (trackpads/mice)
+        if (window.__rdm_debug) {
+            const markSwipe = (ev) => {
+                try {
+                    const dx = Math.abs(ev.deltaX || 0);
+                    const dy = Math.abs(ev.deltaY || 0);
+                    // Heuristic: large horizontal movement with little vertical
+                    if (dx > 20 && dy < 10) {
+                        rdmLog('swipe-detected', { dx, dy });
+                        window.__rdm_swipe_nav = true;
+                        clearTimeout(window.__rdm_swipe_nav_timer);
+                        window.__rdm_swipe_nav_timer = setTimeout(() => { window.__rdm_swipe_nav = false; }, 1000);
+                    } else if (dx > 6) {
+                        rdmLog('wheel-horizontal', { dx, dy, recognized: false });
+                    }
+                    window.__rdm_last_input = { type: 'wheel', dx, dy, t: Date.now() };
+                } catch (_) {}
+            };
+            window.addEventListener('wheel', markSwipe, { passive: true });
+            // Some browsers still emit legacy mousewheel
+            window.addEventListener('mousewheel', (ev) => {
+                try {
+                    const dx = Math.abs(ev.wheelDeltaX ? -ev.wheelDeltaX : (ev.deltaX || 0));
+                    const dy = Math.abs(ev.wheelDeltaY ? -ev.wheelDeltaY : (ev.deltaY || 0));
+                    rdmLog('mousewheel', { dx, dy });
+                    window.__rdm_last_input = { type: 'wheel', dx, dy, t: Date.now() };
+                } catch (_) {}
+            }, { passive: true });
+        }
 
         // Capture keyboard-based back/forward for analysis
         window.addEventListener('keydown', (ev) => {
