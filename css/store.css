@@ -23,19 +23,14 @@ margin-top:15px;
 	}		
 	.product,
 	.product_header {
-	  -webkit-transition: all .45s ease-out;
-	  -moz-transition: all .45s ease-out;
-	  -ms-transition: all .45s ease-out;
-	  -o-transition: all .45s ease-out;
-	  transition:  all .45s ease-out;
+	  /* Hover feedback should feel immediate; .45s read as laggy on a grid.
+	     opacity + margin-top are the only properties that actually change on
+	     these two elements (see `.product a:hover .product_header` below). */
+	  transition: opacity 220ms var(--rdm-ease), margin-top 220ms var(--rdm-ease);
 	  }
 
 	.no_transition .product,
 	.no_transition .product_header {
-	  -webkit-transition: none;
-	  -moz-transition: none;
-	  -ms-transition: none;
-	  -o-transition: none;
 	  transition:  none;
 	  }
 
@@ -191,7 +186,7 @@ margin-top:15px;
 		text-transform:uppercase;
 		letter-spacing:0.5px;
 		cursor:pointer;
-		transition:all 0.2s ease;
+		transition: background-color var(--rdm-hover) ease, border-color var(--rdm-hover) ease;
 	}
 	.paypal-comprar-btn:hover{
 		background-color:#444;
@@ -219,7 +214,7 @@ margin-top:15px;
 		font-weight: bold;
 		text-transform: uppercase;
 		letter-spacing: 0.5px;
-		transition: all 0.2s ease;
+		transition: background-color var(--rdm-hover) ease, border-color var(--rdm-hover) ease;
 		line-height: normal;
 	}
 

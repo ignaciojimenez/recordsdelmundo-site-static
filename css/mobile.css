@@ -78,10 +78,10 @@ body:not(.is-store) .contenido img { max-width: 100% !important; height: auto !i
 .is-store #cabecera_logo { display: none !important; margin-top: 0 !important; }
 .is-store #cabecera_menu1, .is-store #cabecera_menu2 { display: none !important; margin-top: 0 !important; }
 /* Make RDM header animate smoothly on mobile */
-#cabecera_siglas_img { overflow: hidden; max-height: 180px; transition: max-height 250ms ease, padding-top 250ms ease; text-align: center; margin-bottom: 8px; }
+#cabecera_siglas_img { overflow: hidden; max-height: 180px; transition: max-height var(--rdm-header-move) var(--rdm-ease), padding-top var(--rdm-header-move) var(--rdm-ease); text-align: center; margin-bottom: 8px; }
 #cabecera_siglas_img a { display: block; }
 /* Animate image height directly for a true shrink instead of cropping */
-#cabecera_siglas_img img { display: block; height: auto; width: auto; max-width: 100%; margin: 0 auto; transform-origin: top center; max-height: clamp(96px, 18vh, 140px); transition: max-height 250ms ease; }
+#cabecera_siglas_img img { display: block; height: auto; width: auto; max-width: 100%; margin: 0 auto; transform-origin: top center; max-height: clamp(96px, 18vh, 140px); transition: max-height var(--rdm-header-move) var(--rdm-ease); }
 /* Ensure big home logo scales within mobile width */
 #cabecera_logo img { max-width: 100%; height: auto; }
 /* Visible, compact, safe-area-aware in store */
@@ -98,7 +98,7 @@ body:not(.is-store) .contenido img { max-width: 100% !important; height: auto !i
 /* (Removed outgoing animation state to stabilize behavior) */
 
 /* Minimal gap below the small header on store mobile, with smooth transition */
-.is-store .contenido { margin-top: 8px; transition: margin-top 250ms ease; }
+.is-store .contenido { margin-top: 8px; transition: margin-top var(--rdm-header-move) var(--rdm-ease); }
 
 /* (Removed legacy is-shrinking spacing; JS animates margin directly) */
 

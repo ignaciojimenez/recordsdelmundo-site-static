@@ -20,23 +20,38 @@ body.no-anim, body.no-anim * {
   transition: none !important;
 }
 
+/****************************************************
+*		MOTION TOKENS								*
+****************************************************/
+/* Single place to retune the feel of the site. Decelerating curve: motion
+   starts fast and settles, which reads sharper than `ease` at equal duration. */
+:root {
+	--rdm-ease: cubic-bezier(0.2, 0, 0, 1);
+	--rdm-fade-out: 120ms;	/* content leaving; also gates the render delay in js/main.js */
+	--rdm-fade-in: 180ms;	/* content arriving */
+	--rdm-header-move: 400ms;	/* the logo/menu slide - the site's signature gesture */
+	--rdm-hover: 160ms;	/* pointer feedback */
+}
+
+/* Respect the OS "reduce motion" setting. Safe here because content visibility
+   is driven by a class, never by a transitionend event: with transitions
+   collapsed the UI still reaches the correct state, just instantly. */
+@media (prefers-reduced-motion: reduce) {
+	*, *::before, *::after {
+		-webkit-animation-duration: 0.01ms !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		-webkit-transition-duration: 0.01ms !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
 *:link, *:visited, *:hover, *:active, *:focus {
-   -webkit-transition:
-     color .25s linear,
-     background-color .25s linear,
-     border-color .25s linear;
-	-moz-transition:
-     color .25s linear,
-     background-color .25s linear,
-     border-color .25s linear;
-	-o-transition:
-     color .25s linear,
-     background-color .25s linear,
-     border-color .25s linear;
-   transition:
-     color .25s linear,
-     background-color .25s linear,
-     border-color .25s linear;
+	transition:
+		color var(--rdm-hover) ease,
+		background-color var(--rdm-hover) ease,
+		border-color var(--rdm-hover) ease;
 }
 	a { text-decoration: none; color:#000;}
 	a:visited { text-decoration: none;  }
@@ -201,11 +216,11 @@ body.no-anim, body.no-anim * {
 *		ESTILOS CABECERAS							*
 ****************************************************/
 	
+		/* Only margin-top is ever animated here (js/main.js drives it inline).
+		   Transitioning `all` also animated every other property change and
+		   forced needless style work each frame. */
 		.transicion_cabeceras{
-			-webkit-transition: all 1.2s ease;
-			-moz-transition: all 1.2s ease;
-			-o-transition: all 1.2s ease;
-			transition: all 1.2s ease;
+			transition: margin-top var(--rdm-header-move) var(--rdm-ease);
 		}
 		.cabecera_siglas_img {
 			width: 100%;
@@ -222,7 +237,7 @@ body.no-anim, body.no-anim * {
 		
 		.active { text-decoration: none; color:#FFF; background-color:#000;}
 		/* Unified active state for menu links (desktop + mobile) */
-		.cabecera_menu1 a, .cabecera_menu2 a { border-radius: 0; transition: background-color 160ms ease, color 160ms ease; }
+		.cabecera_menu1 a, .cabecera_menu2 a { border-radius: 0; transition: background-color var(--rdm-hover) ease, color var(--rdm-hover) ease; }
 		.cabecera_menu1 a.is-active,
 		.cabecera_menu1 a[aria-current="page"],
 		.cabecera_menu2 a.is-active,
@@ -270,6 +285,16 @@ body.no-anim, body.no-anim * {
 			text-align:justify;
 			margin-top:15px;
 			line-height:1.3em;
+			/* Default is VISIBLE and only `.is-hidden` takes it away, so the
+			   failure mode of any missed step is "shown without a fade" rather
+			   than content stranded invisible. See js/main.js showContent(). */
+			opacity: 1;
+			transition: opacity var(--rdm-fade-in) var(--rdm-ease);
+		}
+		.contenido.is-hidden {
+			opacity: 0;
+			/* Leaving is quicker than arriving: exits should get out of the way. */
+			transition-duration: var(--rdm-fade-out);
 		}
 
 		/* Unified text-link styles inside content (emails, press notes, riders) */
@@ -411,7 +436,6 @@ body.no-anim, body.no-anim * {
 .imagenDisco{
 	position:relative;
 	float:left;
-	display:none;
 	margin-left:20px;
 	width:45%;
 }
