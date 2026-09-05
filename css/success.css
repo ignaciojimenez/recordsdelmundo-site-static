@@ -1,0 +1,25 @@
+/****************************************************
+*		ESTILOS PÁGINA DE PAGO COMPLETADO			*
+****************************************************/
+body.success-page {
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.success-page .success-card {
+	max-width: 720px;
+	margin: 40px auto;
+	padding: 24px;
+	text-align: center;
+}
+
+.success-page .success-card h1 {
+	margin-bottom: 12px;
+}
+
+.success-page .success-card p {
+	margin: 0 0 24px;
+	line-height: 1.6;
+}

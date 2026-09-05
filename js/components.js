@@ -179,7 +179,7 @@ function renderProductPage(productKey) {
     let html = '';
 
     // Left div - Product image and purchase info (except nobandcamp)
-    html += `<div class='imagenDisco' style='text-align:left;font-family:Arial; font-size:12px; float:left; width:280px;'>`;
+    html += `<div class='imagenDisco'>`;
     html += `<img src='images/tienda/${nombre}.jpg' width='280'/>`;
 
     if (product.estado === "ok") {
@@ -201,7 +201,7 @@ function renderProductPage(productKey) {
         html += `<br><strong>Formato:</strong> ${formato}`;
         html += `<br><strong>Lanzamiento:</strong> ${lanzamiento}`;
         html += `<br><strong>Precio:</strong> ${precio} (Envío incluido)`;
-        html += `<br><a href='${bcurl}' style='display:inline-block;' class='descarga'>Comprar en Bandcamp</a>`;
+        html += `<br><a href='${bcurl}' class='descarga'>Comprar en Bandcamp</a>`;
     } else if (product.estado === "preorder") {
         html += `<br><strong>Formato:</strong> ${formato}`;
         html += `<br><strong>Lanzamiento:</strong> ${lanzamiento}`;
@@ -217,13 +217,11 @@ function renderProductPage(productKey) {
     html += `</div>`;
 
     // Right div - Bandcamp player or nobandcamp info
-    html += `<div class='playerDisco' style='text-align:left;font-family:Arial; font-size:12px; float:right; width:300px;'>`;
+    html += `<div class='playerDisco'>`;
     if (product.bcalbum && product.bcalbum !== "") {
-        // Show full playlist on mobile and desktop (mobile uses taller height)
-        const isMobile = (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia('(max-width: 768px)').matches : false;
+        // Full playlist embed; height is set in CSS (#bc), taller on mobile via mobile.css
         const bcSrc = `https://bandcamp.com/EmbeddedPlayer/v=2/album=${bcalbum}/size=grande2/bgcol=FFFFFF/linkcol=333333/`;
-        const bcHeight = isMobile ? 400 : 390;
-        html += `<iframe id="bc" style="position:relative; border:0; width:100%; height:${bcHeight}px;" src="${bcSrc}" allowtransparency="true" frameborder="0"></iframe>`;
+        html += `<iframe id="bc" src="${bcSrc}" allowtransparency="true" frameborder="0"></iframe>`;
     } else if (product.estado === "nobandcamp") {
         html += `<strong>Formato:</strong> ${formato}`;
         html += `<br><strong>Lanzamiento:</strong> ${lanzamiento}`;
@@ -235,12 +233,12 @@ function renderProductPage(productKey) {
                  </form>`;
         html += `<a href='https://bit.ly/${grupo}${nombre}' class='descarga'>DESCARGAR</a>`;
     } else {
-        html += `<span style='font-size:36;text-align:left;'>EL DISCO SELECCIONADO<br>NO PUEDE ESCUCHARSE<br>ACTUALMENTE</span>`;
+        html += `<span class='no-player-msg'>EL DISCO SELECCIONADO<br>NO PUEDE ESCUCHARSE<br>ACTUALMENTE</span>`;
     }
     html += `</div>`;
 
     // Clear floats
-    html += `<div style='clear:both;'></div>`;
+    html += `<div class='disco-clear'></div>`;
 
     return html;
 }
