@@ -1,0 +1,22 @@
+# Files in the asset directory that must NOT be served publicly.
+#
+# assets.directory is "./" (the repo root), and unlike Pages, Workers does not
+# implicitly exclude .git / node_modules / .DS_Store — so without this file the
+# whole git directory is served. See:
+# https://developers.cloudflare.com/workers/static-assets/binding/#ignoring-assets
+
+**/.git
+**/.gitignore
+**/node_modules
+**/.DS_Store
+
+# Local tooling / build state
+.wrangler
+.claude
+
+# Repo metadata, not site content
+.assetsignore
+wrangler.jsonc
+README.md
+CLAUDE.md
+TODO
