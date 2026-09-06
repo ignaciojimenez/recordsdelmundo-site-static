@@ -14,6 +14,60 @@ try { if (typeof window !== 'undefined') window.rdmLog = rdmLog; } catch (_) {}
 try { if (typeof window !== 'undefined' && typeof window.__rdm_last_input === 'undefined') window.__rdm_last_input = null; } catch (_) {}
 try { if (typeof window !== 'undefined' && typeof window.__rdm_click_nav === 'undefined') window.__rdm_click_nav = false; } catch (_) {}
 
+/****************************************************
+ * Content visibility
+ *
+ * `.contenido` is visible by default; only the `is-hidden` class takes it
+ * away (see .contenido/.contenido.is-hidden in css/common.css). That polarity
+ * is deliberate: the last thing every render path does is REMOVE a class, so
+ * if anything suppresses the animation the content still ends up visible.
+ *
+ * Nothing here listens for `transitionend`. It cannot be relied on: the
+ * `body.no-anim` kill switch (BFCache restore / history swipe) sets
+ * `transition: none`, a backgrounded tab defers the event, and an interrupted
+ * transition fires for the wrong target. The setTimeout that already gates
+ * rendering is the state machine; the CSS transition is only decoration.
+ ****************************************************/
+// Must stay >= --rdm-fade-out in css/common.css so the fade finishes before we swap.
+const RDM_FADE_OUT_MS = 120;
+
+function getContentEl() {
+    return document.getElementById('contenido');
+}
+
+function showContent(el) {
+    const target = el || getContentEl();
+    if (target) target.classList.remove('is-hidden');
+}
+
+function hideContentNow(el) {
+    const target = el || getContentEl();
+    if (target) target.classList.add('is-hidden');
+}
+
+// Home leaves `.contenido` empty and display:none - there is nothing to fade
+// out, so waiting for an out-fade there would be pure added latency.
+function hasVisibleContent(el) {
+    const target = el || getContentEl();
+    if (!target) return false;
+    if (target.innerHTML.trim() === '') return false;
+    return getComputedStyle(target).display !== 'none';
+}
+
+function prefersReducedMotion() {
+    try {
+        return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    } catch (_) { return false; }
+}
+
+// Swap content in the same frame instead of fading it. True for history/BFCache
+// navigation (instant), for mobile (where fades caused header flicker), and for
+// reduced motion - there, fading with a zero duration would just leave a blank
+// gap where the fade used to be, which is worse than no transition at all.
+function swapsInstantly(instant, isMobile) {
+    return !!instant || !!isMobile || prefersReducedMotion();
+}
+
 // Load JSON data files
 async function loadData() {
     try {
@@ -123,6 +177,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (isPersisted || isBackForward) {
                 rdmLog('pageshow-apply-no-anim');
                 window.__rdm_restoring = true;
+                // A restore skips re-rendering (see routeFromHash), so if we left
+                // mid-fade the content would come back invisible. Clear it here.
+                showContent();
                 try { document.body.classList.add('no-anim'); } catch (_) {}
                 const clearFlag = () => {
                     rdmLog('pageshow-clear-no-anim');
@@ -217,9 +274,10 @@ function mostrar() {
     clearActiveMenus();
     
     // Hide content area completely for home state
-    const contenido = document.getElementById('contenido');
+    const contenido = getContentEl();
     contenido.innerHTML = '';
     contenido.style.display = 'none';
+    showContent(contenido);
 
     currentPage = '';
 
@@ -301,11 +359,12 @@ function esconder(page, options = {}) {
 function loadPage(page, options = {}) {
     const instant = !!options.instant;
     const isMobile = (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia('(max-width: 768px)').matches : false;
-    hideContent({ instant });
+    const fadingOut = hideContent({ instant });
     // Ensure we are at the top when loading a new page
     window.scrollTo(0, 0);
     
-    const delay = instant ? 0 : (isMobile ? 0 : 1000);
+    // Wait only if there is genuinely an out-fade in flight.
+    const delay = fadingOut ? RDM_FADE_OUT_MS : 0;
     setTimeout(() => {
         clearActiveMenus();
         setActiveMenu(page);
@@ -398,13 +457,9 @@ function loadPage(page, options = {}) {
         
         currentPage = page;
         
-        // Show content (no animation on mobile to avoid flicker)
-        const inDuration = (instant || isMobile) ? 0 : (page === 'tienda' ? 1100 : 900);
-        if (inDuration === 0) {
-            $('.contenido').show();
-        } else {
-            $('.contenido').fadeIn(inDuration);
-        }
+        // Fades in via CSS on desktop; instant on mobile/restore. Either way
+        // this is the last step, so content always ends up visible.
+        showContent(contenido);
         
         // Back arrow removed: no-op
         
@@ -414,12 +469,9 @@ function loadPage(page, options = {}) {
 function loadProductPage(productKey, options = {}) {
     const instant = !!options.instant;
     const isMobile = (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia('(max-width: 768px)').matches : false;
-    // Stop any ongoing animations first
-    $('.contenido').stop(true, true);
-    $('.imagenDisco').stop(true, true);
-    
-    // Hide content immediately without animation
-    $('.contenido').hide();
+    // No animation to cancel: re-setting the class simply redirects any
+    // in-flight opacity transition toward the new target.
+    const fadingOut = hideContent({ instant });
     window.scrollTo(0, 0);
     
     // Set tienda header layout for product pages
@@ -434,8 +486,8 @@ function loadProductPage(productKey, options = {}) {
     if (menu2) menu2.style.marginTop = "-70px";
     if (instant) { try { void (siglas || logo || menu1 || menu2).offsetHeight; } catch (e) {} setTimeout(() => { [siglas, logo, menu1, menu2].forEach(el => { if (el) el.style.transition = ''; }); }, 0); }
     
-    // Shorter timeout to reduce race conditions
-    const delay = instant ? 0 : (isMobile ? 150 : 300);
+    // Matches loadPage: wait only as long as the out-fade actually takes.
+    const delay = fadingOut ? RDM_FADE_OUT_MS : 0;
     setTimeout(() => {
         clearActiveMenus();
         setActiveMenu('tienda');
@@ -466,10 +518,9 @@ function loadProductPage(productKey, options = {}) {
         contenido.style.display = 'block';
         contenido.style.marginTop = isMobile ? '12px' : '400px';
         
-        // Show content immediately and reliably
-        $(contenido).show();
-        $('.imagenDisco').show();
-        // Back arrow removed
+        // `.imagenDisco` is no longer hidden by default in CSS, so there is
+        // nothing to reveal here beyond the content itself.
+        showContent(contenido);
         
         currentPage = `tienda/producto/${productKey}`;
         
@@ -477,14 +528,22 @@ function loadProductPage(productKey, options = {}) {
     }, delay);
 }
 
+// Returns true when an out-fade was actually started, so callers know whether
+// they need to wait for it before swapping content in.
 function hideContent(options = {}) {
     const instant = !!options.instant;
     const isMobile = (typeof window !== 'undefined' && window.matchMedia) ? window.matchMedia('(max-width: 768px)').matches : false;
-    if (instant || isMobile) {
-        $(".contenido").hide();
-        return;
+    const contenido = getContentEl();
+    if (!contenido) return false;
+    if (swapsInstantly(instant, isMobile) || !hasVisibleContent(contenido)) {
+        // Nothing to cover: either we swap in the same frame, or there is no
+        // outgoing content (coming from home). Clear any leftover hidden state
+        // rather than adding one that nothing would undo.
+        showContent(contenido);
+        return false;
     }
-    $(".contenido").fadeOut(1000);
+    hideContentNow(contenido);
+    return true;
 }
 
 function clearActiveMenus() {
