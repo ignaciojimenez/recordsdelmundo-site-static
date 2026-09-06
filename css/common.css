@@ -29,7 +29,8 @@ body.no-anim, body.no-anim * {
 	--rdm-ease: cubic-bezier(0.2, 0, 0, 1);
 	--rdm-fade-out: 120ms;	/* content leaving; also gates the render delay in js/main.js */
 	--rdm-fade-in: 180ms;	/* content arriving */
-	--rdm-header-move: 400ms;	/* the logo/menu slide - the site's signature gesture */
+	--rdm-header-move: 500ms;	/* desktop logo/menu slide (~570px) - the signature gesture */
+	--rdm-header-shrink: 400ms;	/* mobile header shrink - a much shorter move, so quicker */
 	--rdm-hover: 160ms;	/* pointer feedback */
 }
 
