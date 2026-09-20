@@ -1,8 +1,6 @@
 # AGENTS.md
 
 Context for coding agents working in this repository (open agents.md standard).
-`CLAUDE.md` is a symlink to this file, because Claude Code reads `CLAUDE.md`
-rather than `AGENTS.md`.
 
 ## Project Overview
 
